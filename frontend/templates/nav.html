@@ -1,0 +1,101 @@
+<div class="sidebar" data-background-color="dark">
+    <div class="sidebar-logo">
+        <!-- Logo Header -->
+        <div class="logo-header" data-background-color="dark">
+            <a href="/" class="logo">
+                <img src="{{ url_for('static', filename='img/logo_light.svg') }}" alt="navbar brand" class="navbar-brand" height="20">
+            </a>
+            <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                    <i class="gg-menu-right"></i>
+                </button>
+                <button class="btn btn-toggle sidenav-toggler">
+                    <i class="gg-menu-left"></i>
+                </button>
+            </div>
+            <button class="topbar-toggler more">
+                <i class="gg-more-vertical-alt"></i>
+            </button>
+        </div>
+        <!-- End Logo Header -->
+    </div>
+    <div class="scroll-wrapper sidebar-wrapper scrollbar scrollbar-inner">
+        <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
+                        <i class="fas fa-home"></i>
+                        <p>Dashboard</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="dashboard">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="/dashboard">
+                                    <span class="sub-item">Overview</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-section">
+                    <h4 class="text-section">Management</h4>
+                </li>
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#players">
+                        <i class="fas fa-users"></i>
+                        <p>Players</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="players">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="/players">
+                                    <span class="sub-item">All Players</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/players/register">
+                                    <span class="sub-item">Register Player</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#matches">
+                        <i class="fas fa-trophy"></i>
+                        <p>Matches</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="matches">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="/matches">
+                                    <span class="sub-item">All Matches</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/matches/add">
+                                    <span class="sub-item">Add Match</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="/ranking">
+                        <i class="fas fa-ranking-star"></i>
+                        <p>Ranking</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/settings">
+                        <i class="fas fa-cog"></i>
+                        <p>Settings</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

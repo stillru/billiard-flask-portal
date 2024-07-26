@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="card card-round">
+        <div class="card-header">
+            <div class="card-head-row card-tools-still-right">
+                <h4 class="card-title">Registration</h4>
+            </div>
+            <p class="card-category">Registration of new player</p>
+        </div>
+        <div class="card-body">
+            <form onsubmit="register(event)">
+                <div class="form-group form-group-default">
+                    <label for="name">Name</label>
+                    <input id="name" name="name" type="text" class="form-control" placeholder="Fill Name" required>
+                </div>
+                <div class="form-group form-group-default">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" name="email" size="32" required><br>
+                </div>
+                <div class="form-group form-group-default">
+                    <label for="password">Password</label><br>
+                    <input type="password" id="password" class="form-control" name="password" size="32" required><br>
+                </div>
+                <div class="form-group form-group-default">
+                    <label for="confirm_password">Confirm Password</label><br>
+                    <input type="password" id="confirm_password" class="form-control" name="confirm_password" size="32" required><br>
+                </div>
+                <div class="form-group form-group-default">
+                    <button class="btn btn-black btn-border" type="submit">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+{% endblock %}

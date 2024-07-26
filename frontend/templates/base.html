@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/kaiadmin.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/plugins.min.css') }}">
+    <script src="{{ url_for('static', filename='js/plugin/webfont/webfont.min.js') }}"></script>
+    <script>
+        WebFont.load({
+            google: { families: ["Public Sans:300,400,500,600,700"] },
+            custom: {
+                families: [
+                    "Font Awesome 5 Solid",
+                    "Font Awesome 5 Regular",
+                    "Font Awesome 5 Brands",
+                    "simple-line-icons"
+                ],
+                urls: ["{{ url_for('static', filename='css/fonts.min.css') }}"]
+            },
+            active: function () {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
+    <title>{% block title %}Billiards League{% endblock %}</title>
+</head>
+<body>
+<div class="wrapper">
+    {% include 'nav.html' %}
+
+    <div class="main-panel">
+        <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+            <div class="container-fluid">
+              <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <button type="submit" class="btn btn-search pe-1">
+                      <i class="fa fa-search search-icon"></i>
+                    </button>
+                  </div>
+                  <input type="text" placeholder="Search ..." class="form-control">
+                </div>
+              </nav>
+
+              <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                <li class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none">
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" aria-haspopup="true">
+                    <i class="fa fa-search"></i>
+                  </a>
+                  <ul class="dropdown-menu dropdown-search animated fadeIn">
+                    <form class="navbar-left navbar-form nav-search">
+                      <div class="input-group">
+                        <input type="text" placeholder="Search ..." class="form-control">
+                      </div>
+                    </form>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        <div class="container">
+            <div class="page-inner">
+                <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/core/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/core/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/core/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugin/chart.js/chart.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugin/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugin/chart-circle/circles.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugin/datatables/datatables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugin/jsvectormap/jsvectormap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugin/jsvectormap/world.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugin/sweetalert/sweetalert.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kaiadmin.min.js') }}"></script>
+<script>
+    $(".toggle-sidebar").click(function() {
+        $(".sidebar").toggleClass("sidebar-hidden");
+    });
+    $(".sidenav-toggler").click(function() {
+        $(".sidebar").toggleClass("sidebar-hidden");
+    });
+</script>
+</body>
+</html>
