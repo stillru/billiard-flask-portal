@@ -5,11 +5,13 @@ from flask_cors import CORS
 
 from api.player import player_bp
 from config import Config, configure_logging
-from models import db
+from extensions import db, migrate
+import models
 
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
+migrate.init_app(app, db)
 CORS(app)  # Разрешить междоменные запросы для API
 
 # Настройка logging

@@ -1,6 +1,6 @@
 from flask import request, jsonify, Blueprint
 from models.player import Player
-from back import db
+from extensions import db
 
 player_bp = Blueprint('api', __name__)
 

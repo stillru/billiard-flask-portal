@@ -1,5 +1,6 @@
 import pytest
-from app import app, db
+from back import app
+from extensions import db
 from models.player import Player
 
 
