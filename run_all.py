@@ -3,11 +3,11 @@ import os
 
 def run_backend():
     backend_path = os.path.join(os.getcwd(), 'backend', 'back.py')
-    return subprocess.Popen(['python', backend_path])
+    return subprocess.Popen(['python', backend_path], cwd=os.path.join(os.getcwd(), 'backend'))
 
 def run_frontend():
     frontend_path = os.path.join(os.getcwd(), 'frontend', 'front.py')
-    return subprocess.Popen(['python', frontend_path])
+    return subprocess.Popen(['python', frontend_path], cwd=os.path.join(os.getcwd(), 'frontend'))
 
 if __name__ == "__main__":
     backend_process = run_backend()
