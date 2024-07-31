@@ -3,6 +3,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class Player(db.Model):
+
+    __tablename__ = "player"
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
