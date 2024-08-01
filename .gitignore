@@ -1,3 +1,5 @@
 /venv/
 /backend/instance/
 /instance/
+/.idea
+/database/data/
