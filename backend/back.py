@@ -29,6 +29,5 @@ if __name__ == "__main__":
         logger.info("Registered Endpoints:")
         for rule in app.url_map.iter_rules():
             logger.info(f"Endpoint: {rule.endpoint}, URL: {rule.rule}")
-        db.create_all()
         logger.info("DB initialased")
     app.run(debug=True, port=5000)
