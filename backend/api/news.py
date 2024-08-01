@@ -1,11 +1,10 @@
 from flask import request, jsonify, Blueprint
-from models.player import Player
-from extensions import db
 
-from models import News
+from extensions import db
 from models import Club
-from models import Tournament
 from models import Game
+from models import News
+from models import Tournament
 
 news_bp = Blueprint("api", __name__)
 
