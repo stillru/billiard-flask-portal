@@ -1,3 +1,6 @@
+import os
+
+import pyscrypt
 from extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -13,7 +16,8 @@ class Player(db.Model):
     notes = db.Column(db.Text)
 
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+        salt = os.urandom(16)
+        self.password_hash = pyscrypt.hash(password.encode('utf-8'), salt, N=16384, r=8, p=1, dkLen=64)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)

@@ -7,7 +7,8 @@ class Tournament(db.Model):
     season_id = db.Column(db.Integer, db.ForeignKey("season.id"), nullable=False)
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
-    games = db.relationship("Game", back_populates='tournament', cascade='all, delete-orphan')
+    games = db.relationship(
+        "Game", back_populates="tournament", cascade="all, delete-orphan"
+    )
 
     season = db.relationship("Season", back_populates="tournaments")
-

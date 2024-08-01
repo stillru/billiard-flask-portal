@@ -12,6 +12,7 @@ news_tags = db.Table(
     db.Column("tag_id", db.Integer, db.ForeignKey("tag.id")),
 )
 
+
 class News(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)

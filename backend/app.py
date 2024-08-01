@@ -20,16 +20,17 @@ def create_app(config):
     CORS(app)
 
     logger = logging.getLogger(__name__)
-
-    app.register_blueprint(player_bp, url_prefix="/api", name="player_api")
-    app.register_blueprint(news_bp, url_prefix="/api", name="news_api")
-    app.register_blueprint(game_bp, url_prefix="/api", name="game_api")
-    app.register_blueprint(event_bp, url_prefix="/api", name="event_api")
+    with app.app_context():
+        app.register_blueprint(player_bp, url_prefix="/api", name="player_api")
+        app.register_blueprint(news_bp, url_prefix="/api", name="news_api")
+        app.register_blueprint(game_bp, url_prefix="/api", name="game_api")
+        app.register_blueprint(event_bp, url_prefix="/api", name="event_api")
+        db.create_all()
     return app
 
 
 if __name__ == "__main__":
-    app = create_app('config.ProductionConfig')
+    app = create_app("config.ProductionConfig")
     with app.app_context():
         for rule in app.url_map.iter_rules():
             print(f"Endpoint: {rule.endpoint}, URL: {rule.rule}")

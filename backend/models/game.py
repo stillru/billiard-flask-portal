@@ -12,9 +12,11 @@ class Game(db.Model):
     tournament_id = db.Column(db.Integer, db.ForeignKey("tournament.id"), nullable=True)
     season_id = db.Column(db.Integer, db.ForeignKey("season.id"), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    parties = db.relationship("Party", back_populates="game", cascade='all, delete-orphan')
+    parties = db.relationship(
+        "Party", back_populates="game", cascade="all, delete-orphan"
+    )
 
     player1 = db.relationship("Player", foreign_keys=[player1_id])
     player2 = db.relationship("Player", foreign_keys=[player2_id])
-    tournament = db.relationship('Tournament', back_populates='games')
-    season = db.relationship('Season', back_populates='games')
+    tournament = db.relationship("Tournament", back_populates="games")
+    season = db.relationship("Season", back_populates="games")
