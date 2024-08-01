@@ -8,7 +8,8 @@ class Config:
     LOG_LEVEL = logging.DEBUG
     LOG_FORMAT = "[BACKEND] %(asctime)s - %(name)s - %(levelname)s - %(message)s"
     SECRET_KEY = "just_play"
-    SQLALCHEMY_DATABASE_URI = "sqlite:///billiards_league.db"
+    token = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjI3MzkyNzZ9.TK17rHBCyk0Fwd8xPozoGZx0hF5EW-d5NVrRNHNzM7LSjVGoMU1szSUC0PYw9ZM9G8iShHgv4D1KQF-0l0NbDw'
+    SQLALCHEMY_DATABASE_URI = f'sqlite+libsql://localhost:5002/?authToken={token}&secure=false'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 

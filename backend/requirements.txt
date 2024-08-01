@@ -5,3 +5,4 @@ Flask-Cors
 pytest
 pytest-flask
 Flask-Migrate
+sqlalchemy-libsql
