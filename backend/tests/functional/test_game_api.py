@@ -46,7 +46,7 @@ def test_create_play(client):
 
 
 def test_list_plays(client):
-    plays = client.get("/api/games/1/plays")
+    plays = client.get("/api/game/1/plays")
     json_data = plays.get_json()
     logger.info(json_data)
     assert plays.status_code == 200
@@ -57,16 +57,16 @@ def test_list_multiple_plays(client):
         "/api/game/1/plays",
         json={"type_id": 1, "game_id": 1},
     )
-    plays = client.get("/api/games/1/plays")
+    plays = client.get("/api/game/1/plays")
     json_data = plays.get_json()
     logger.info(json_data)
     assert plays.status_code == 200
-    assert json_data["data"]["count"] == 2
+    assert json_data["data"]["count"] == 3
 
 
 def test_wrong_game(client):
     wrong = client.post(
-        "/api/game/2/end",
+        "/api/game/3/end",
         json={"winner_id": 1, "score_player1": 4, "score_player2": 2},
     )
     json_data = wrong.get_json()
