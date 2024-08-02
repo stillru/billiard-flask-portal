@@ -6,4 +6,4 @@ from .game import Game
 from .tags import Tag
 from .player import Player
 from .season import Season
-from .party import PartyType, Party, PartyEvent
+from .play import PlayType, Play, PlayEvent

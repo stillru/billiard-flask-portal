@@ -14,8 +14,8 @@ class Game(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     ended_at = db.Column(db.DateTime, nullable=True)
     winner_id = db.Column(db.Integer, db.ForeignKey("player.id"), nullable=True)
-    parties = db.relationship(
-        "Party", back_populates="game", cascade="all, delete-orphan"
+    plays = db.relationship(
+        "Play", back_populates="game", cascade="all, delete-orphan"
     )
 
     player1 = db.relationship("Player", foreign_keys=[player1_id])
@@ -31,5 +31,5 @@ class Game(db.Model):
             "winner_id": self.winner_id,
             "player1_score": self.score_player1,
             "player2_score": self.score_player2,
-            "played_parties": [party.to_dict() for party in self.parties],
+            "played_plays": [play.to_dict() for play in self.plays],
         }

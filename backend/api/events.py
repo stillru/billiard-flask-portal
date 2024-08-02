@@ -6,7 +6,7 @@ from api.game import create_game
 event_bp = Blueprint("event_bp", __name__)
 
 from flask import Blueprint, request, jsonify
-from models import Party, PartyEvent, WinReason
+from models import Play, PlayEvent, WinReason
 from decorators import format_response
 
 event_bp = Blueprint("event_bp", __name__)
@@ -112,4 +112,4 @@ def to_dict(self):
     }
 
 
-PartyEvent.to_dict = to_dict
+PlayEvent.to_dict = to_dict
