@@ -20,26 +20,28 @@ app.register_blueprint(common_bp)
 def get_routes():
     output = []
     for rule in app.url_map.iter_rules():
-        methods = ','.join(sorted(rule.methods))
+        methods = ",".join(sorted(rule.methods))
         endpoint = current_app.view_functions[rule.endpoint]
-        metadata = getattr(endpoint, '_metadata', {})
-        output.append({
-            'endpoint': rule.endpoint,
-            'methods': methods,
-            'url': rule.rule,
-            'name': metadata.get('name', rule.endpoint),
-            'category': metadata.get('category', 'Utils'),
-            'requires_auth': metadata.get('requires_auth', False)
-        })
+        metadata = getattr(endpoint, "_metadata", {})
+        output.append(
+            {
+                "endpoint": rule.endpoint,
+                "methods": methods,
+                "url": rule.rule,
+                "name": metadata.get("name", rule.endpoint),
+                "category": metadata.get("category", "Utils"),
+                "requires_auth": metadata.get("requires_auth", False),
+            }
+        )
     return output
 
 
 @app.context_processor
 def inject_routes():
-    return {'routes': get_routes()}
+    return {"routes": get_routes()}
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with app.app_context():
         print("FRONTEND ' Registered Endpoints:")
         for rule in app.url_map.iter_rules():

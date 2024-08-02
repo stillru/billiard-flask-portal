@@ -12,6 +12,8 @@ class Game(db.Model):
     tournament_id = db.Column(db.Integer, db.ForeignKey("tournament.id"), nullable=True)
     season_id = db.Column(db.Integer, db.ForeignKey("season.id"), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    ended_at = db.Column(db.DateTime, nullable=True)
+    winner_id = db.Column(db.Integer, db.ForeignKey("player.id"), nullable=True)
     parties = db.relationship(
         "Party", back_populates="game", cascade="all, delete-orphan"
     )
@@ -20,3 +22,14 @@ class Game(db.Model):
     player2 = db.relationship("Player", foreign_keys=[player2_id])
     tournament = db.relationship("Tournament", back_populates="games")
     season = db.relationship("Season", back_populates="games")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "start_time": self.created_at,
+            "end_time": self.ended_at,
+            "winner_id": self.winner_id,
+            "player1_score": self.score_player1,
+            "player2_score": self.score_player2,
+            "played_parties": [party.to_dict() for party in self.parties],
+        }

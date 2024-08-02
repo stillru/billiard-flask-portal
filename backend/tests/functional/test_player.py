@@ -9,7 +9,7 @@ def test_register_success(client):
     )
     json_data = response.get_json()
     assert response.status_code == 201
-    assert json_data["message"] == "Registration successful"
+    assert json_data["data"]["message"] == "Registration successful"
 
 
 def test_register_missing_data(client):
@@ -17,9 +17,8 @@ def test_register_missing_data(client):
         "/api/register", json={"name": "John Doe", "email": "john@example.com"}
     )
     json_data = response.get_json()
-    print(json_data)
     assert response.status_code == 400
-    assert "error" in json_data
+    assert json_data["data"]["error"] == "Invalid input"
 
 
 def test_register_duplicate_email(client):
@@ -41,4 +40,4 @@ def test_register_duplicate_email(client):
     )
     json_data = response.get_json()
     assert response.status_code == 400
-    assert json_data["error"] == "Player already exists"
+    assert json_data["data"]["error"] == "Player already exists"

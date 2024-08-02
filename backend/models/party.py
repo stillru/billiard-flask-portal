@@ -19,6 +19,16 @@ class Party(db.Model):
     win_reason = db.relationship("WinReason")
     type = db.relationship("PartyType")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "game_type": self.type,
+            "start_time": self.start_time,
+            "end_time": self.end_time,
+            "winner_id": self.winner_id,
+            "winner": self.winner,
+        }
+
 
 class PartyEvent(db.Model):
     id = db.Column(db.Integer, primary_key=True)

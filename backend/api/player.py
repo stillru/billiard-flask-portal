@@ -23,4 +23,4 @@ def register():
     player.set_password(data["password"])
     db.session.add(player)
     db.session.commit()
-    return jsonify({"message": "Registration successful", "data": {"id": player.id}}), 201
+    return jsonify({"message": "Registration successful", "id": player.id}), 201

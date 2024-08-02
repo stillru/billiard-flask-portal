@@ -15,11 +15,21 @@ class Player(db.Model):
     def set_password(self, password):
         self.salt = os.urandom(16).hex()  # Generate a new salt
         self.password_hash = pyscrypt.hash(
-            password.encode("utf-8"), bytes(self.salt, "utf-8"), N=16384, r=8, p=1, dkLen=64
+            password.encode("utf-8"),
+            bytes(self.salt, "utf-8"),
+            N=16384,
+            r=8,
+            p=1,
+            dkLen=64,
         ).hex()
 
     def check_password(self, password):
         hashed_password = pyscrypt.hash(
-            password.encode("utf-8"), bytes(self.salt, "utf-8"), N=16384, r=8, p=1, dkLen=64
+            password.encode("utf-8"),
+            bytes(self.salt, "utf-8"),
+            N=16384,
+            r=8,
+            p=1,
+            dkLen=64,
         ).hex()
         return hashed_password == self.password_hash

@@ -15,11 +15,64 @@ def test_create_game(client):
             "password": "password123",
         },
     )
-    print(player1.response())
-    print(player2.response())
+    data_player1 = player1.get_json()
+    data_player2 = player2.get_json()
     response = client.post(
-        "/api/games", json={"player1_id": player1.data.id, "player2_id": player2.data.id}
+        "/api/games",
+        json={
+            "player1_id": data_player1["data"]["id"],
+            "player2_id": data_player2["data"]["id"],
+        },
     )
+    json_data = response.get_json()
+    print(f"Created game with ID: {json_data['data']['id']}")
     assert response.status_code == 201
-    game_id = response.json["id"]
-    print(f"Created game with ID: {game_id}")
+
+
+def test_create_play(client):
+    play = client.post(
+        "/api/games/1/plays",
+        json={"type_id": 1, "game_id": 1},
+    )
+    json_data = play.get_json()
+    print(json_data)
+    assert play.status_code == 201
+
+
+def test_list_plays(client):
+    plays = client.get("/api/games/1/plays")
+    json_data = plays.get_json()
+    print(json_data)
+    assert plays.status_code == 200
+
+
+def test_list_multiple_plays(client):
+    client.post(
+        "/api/games/1/plays",
+        json={"type_id": 1, "game_id": 1},
+    )
+    plays = client.get("/api/games/1/plays")
+    json_data = plays.get_json()
+    print(json_data)
+    assert plays.status_code == 200
+    assert json_data["data"]["count"] == 2
+
+
+def test_wrong_game(client):
+    wrong = client.post(
+        "/api/games/2/end",
+        json={"winner_id": 1, "score_player1": 4, "score_player2": 2},
+    )
+    json_data = wrong.get_json()
+    print(json_data)
+    assert wrong.status_code == 400
+
+
+def test_end_game(client):
+    end = client.post(
+        "/api/games/1/end",
+        json={"winner_id": 1, "score_player1": 4, "score_player2": 2},
+    )
+    json_data = end.get_json()
+    print(json_data)
+    assert end.status_code == 200

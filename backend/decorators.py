@@ -1,21 +1,23 @@
 from functools import wraps
-from flask import jsonify, make_response
+from flask import request, jsonify, make_response, Response
+from werkzeug.wrappers import Response as WerkzeugResponse
 
 
 def format_response(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
-        # Execute the original function and get the response and status code
         response = func(*args, **kwargs)
 
-        # Check if the response is a tuple, if so, extract the status code
         if isinstance(response, tuple):
             data, status_code = response
         else:
             data = response
             status_code = 200  # Default status code
 
-        # Define status messages
+        # If the response is an instance of Response or WerkzeugResponse, extract the JSON data
+        if isinstance(data, (Response, WerkzeugResponse)):
+            data = data.get_json()
+
         status_messages = {
             200: "OK",
             201: "Created",
@@ -24,19 +26,17 @@ def format_response(func):
             403: "Forbidden",
             404: "Not Found",
             500: "Internal Server Error",
+            700: "Wrong game in query",
         }
 
-        # Get the status message corresponding to the status code
         status_message = status_messages.get(status_code, "Unknown Status")
 
-        # Create the formatted response
         formatted_response = {
-            "Status": status_code,
-            "State": status_message,
-            "Data": data
+            "status": status_code,
+            "state": status_message,
+            "data": data,
         }
-
-        # Return the formatted response
+        print(jsonify(formatted_response), status_code)
         return make_response(jsonify(formatted_response), status_code)
 
     return decorated_function
