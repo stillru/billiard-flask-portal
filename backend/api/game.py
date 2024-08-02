@@ -8,7 +8,7 @@ from decorators import format_response
 game_bp = Blueprint("game_bp", __name__)
 
 
-@game_bp.route("/games", methods=["POST"])
+@game_bp.route("/game", methods=["POST"])
 @format_response
 def create_game():
     data = request.get_json()
@@ -21,7 +21,7 @@ def create_game():
     return jsonify({"message": "Game created", "id": new_game.id}), 201
 
 
-@game_bp.route("/games/<int:game_id>/plays", methods=["POST"])
+@game_bp.route("/game/<int:game_id>/plays", methods=["POST"])
 @format_response
 def add_party(game_id):
     data = request.get_json()
@@ -37,7 +37,7 @@ def add_party(game_id):
     return jsonify({"message": "New play started", "id": new_party.id}), 201
 
 
-@game_bp.route("/games/<int:game_id>/plays", methods=["GET"])
+@game_bp.route("/game/<int:game_id>/plays", methods=["GET"])
 @format_response
 def get_parties(game_id):
     parties = Party.query.filter_by(game_id=game_id).all()
@@ -48,7 +48,7 @@ def get_parties(game_id):
     )
 
 
-@game_bp.route("/games/<int:game_id>/end", methods=["POST"])
+@game_bp.route("/game/<int:game_id>/end", methods=["POST"])
 @format_response
 def end_game(game_id):
     data = request.get_json()
@@ -70,7 +70,7 @@ def end_game(game_id):
         )
 
 
-@game_bp.route("/games/<int:game_id>", methods=["DELETE"])
+@game_bp.route("/game/<int:game_id>", methods=["DELETE"])
 def delete_game(game_id):
     game = Game.query.get_or_404(game_id)
     db.session.delete(game)
@@ -78,7 +78,7 @@ def delete_game(game_id):
     return jsonify(message="Game deleted successfully"), 200
 
 
-@game_bp.route("/games/<int:game_id>", methods=["GET"])
+@game_bp.route("/game/<int:game_id>", methods=["GET"])
 def get_game(game_id):
     game = Game.query.get_or_404(game_id)
     return jsonify(game.to_dict()), 200

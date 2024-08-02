@@ -24,6 +24,8 @@ def client(app):
 def app():
     app = create_app("config.TestConfig")
     with app.app_context():
+        for rule in app.url_map.iter_rules():
+            print(f"Endpoint: {rule.endpoint}, URL: {rule.rule}")
         yield app
 
 
