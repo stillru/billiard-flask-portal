@@ -64,6 +64,12 @@ def end_game(game_id):
         game.score_player2 = score_player2
         game.ended_at = datetime.datetime.utcnow()
         db.session.commit()
+        for play in game.parties:
+            if play.end_time is None:
+                play.end_time = datetime.datetime.utcnow()
+                db.session.add(play)
+                db.session.commit()
+                print(jsonify(f"Updated play: {play.game_id} with {play.end_time}"))
         return (
             jsonify({"results": game.to_dict(), "message": "Game ended successfully"}),
             200,
