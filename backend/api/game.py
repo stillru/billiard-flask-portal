@@ -14,7 +14,7 @@ def create_game():
     new_game = Game(player1_id=player1_id, player2_id=player2_id)
     db.session.add(new_game)
     db.session.commit()
-    return jsonify(id=new_game.id), 201
+    return jsonify({"message": "Registration successful", "data": {"id": new_game.id}}), 201
 
 
 @game_bp.route("/games/<int:game_id>/parties", methods=["POST"])

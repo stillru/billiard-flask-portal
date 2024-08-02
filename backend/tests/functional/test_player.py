@@ -1,15 +1,15 @@
 def test_register_success(client):
-        response = client.post(
-            "/api/register",
-            json={
-                "name": "John Doe",
-                "email": "john@example.com",
-                "password": "password123",
-            },
-        )
-        json_data = response.get_json()
-        assert response.status_code == 201
-        assert json_data["message"] == "Registration successful"
+    response = client.post(
+        "/api/register",
+        json={
+            "name": "John Doe",
+            "email": "john@example.com",
+            "password": "password123",
+        },
+    )
+    json_data = response.get_json()
+    assert response.status_code == 201
+    assert json_data["message"] == "Registration successful"
 
 
 def test_register_missing_data(client):
