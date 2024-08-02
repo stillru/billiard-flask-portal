@@ -3,21 +3,21 @@ from datetime import datetime
 from extensions import db
 
 
-class Party(db.Model):
+class Play(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     game_id = db.Column(
         db.Integer, db.ForeignKey("game.id"), nullable=False
     )  # Foreign key to Game
-    type_id = db.Column(db.Integer, db.ForeignKey("party_type.id"), nullable=False)
+    type_id = db.Column(db.Integer, db.ForeignKey("play_type.id"), nullable=False)
     start_time = db.Column(db.DateTime, default=datetime.utcnow)
     end_time = db.Column(db.DateTime)
     winner_id = db.Column(db.Integer, db.ForeignKey("player.id"), nullable=True)
     win_reason_id = db.Column(db.Integer, db.ForeignKey("win_reason.id"), nullable=True)
 
     winner = db.relationship("Player", foreign_keys=[winner_id])
-    game = db.relationship("Game", back_populates="parties")
+    game = db.relationship("Game", back_populates="plays")
     win_reason = db.relationship("WinReason")
-    type = db.relationship("PartyType")
+    type = db.relationship("PlayType")
 
     def to_dict(self):
         return {
@@ -30,9 +30,9 @@ class Party(db.Model):
         }
 
 
-class PartyEvent(db.Model):
+class PlayEvent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    party_id = db.Column(db.Integer, db.ForeignKey("party.id"), nullable=False)
+    play_id = db.Column(db.Integer, db.ForeignKey("play.id"), nullable=False)
     player_id = db.Column(db.Integer, db.ForeignKey("player.id"), nullable=True)
     event_type = db.Column(db.String(50), nullable=False)
     ball_number = db.Column(db.Integer, nullable=True)
@@ -41,11 +41,11 @@ class PartyEvent(db.Model):
     )
     details = db.Column(db.String(255), nullable=True)
 
-    party = db.relationship("Party", foreign_keys=[party_id])
+    play = db.relationship("Play", foreign_keys=[play_id])
     player = db.relationship("Player", foreign_keys=[player_id])
 
 
-class PartyType(db.Model):
+class PlayType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(255), nullable=True)

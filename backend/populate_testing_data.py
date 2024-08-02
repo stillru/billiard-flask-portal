@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash
 from app import app
-from models import Player, Tag, Game, Party
+from models import Player, Tag, Game, Play
 from extensions import db
 
 with app.app_context():

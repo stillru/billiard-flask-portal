@@ -2,7 +2,7 @@ import datetime
 
 from flask import Blueprint, request, jsonify
 from extensions import db
-from models import Game, Party
+from models import Game, Play
 from decorators import format_response
 
 game_bp = Blueprint("game_bp", __name__)
@@ -27,7 +27,7 @@ def add_party(game_id):
     data = request.get_json()
     type_id = data.get("type_id")
 
-    new_party = Party(
+    new_party = Play(
         game_id=game_id,
         type_id=type_id,
         win_reason_id="0",
@@ -39,11 +39,11 @@ def add_party(game_id):
 
 @game_bp.route("/game/<int:game_id>/plays", methods=["GET"])
 @format_response
-def get_parties(game_id):
-    parties = Party.query.filter_by(game_id=game_id).all()
-    games = len(parties)
+def get_plays(game_id):
+    plays = Play.query.filter_by(game_id=game_id).all()
+    games = len(plays)
     return (
-        jsonify({"count": games, "items": [party.to_dict() for party in parties]}),
+        jsonify({"count": games, "items": [play.to_dict() for play in plays]}),
         200,
     )
 
@@ -64,7 +64,7 @@ def end_game(game_id):
         game.score_player2 = score_player2
         game.ended_at = datetime.datetime.utcnow()
         db.session.commit()
-        for play in game.parties:
+        for play in game.plays:
             if play.end_time is None:
                 play.end_time = datetime.datetime.utcnow()
                 db.session.add(play)
