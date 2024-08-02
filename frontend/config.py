@@ -5,7 +5,7 @@ class Config:
     DEBUG = True
     PORT = 5001
     LOG_LEVEL = logging.DEBUG
-    LOG_FORMAT = '[FRONTEND] %(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    LOG_FORMAT = "[FRONTEND] %(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 
 def configure_logging():

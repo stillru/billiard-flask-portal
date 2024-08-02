@@ -6,3 +6,5 @@ pytest
 pytest-flask
 Flask-Migrate
 sqlalchemy-libsql
+pytest
+pytest-flask

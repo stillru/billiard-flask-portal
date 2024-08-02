@@ -1,11 +1,15 @@
 from flask import request, jsonify, Blueprint
-from models.player import Player
+
+from models.player import Player  # Проверьте путь к модели
 from extensions import db
+
+from decorators import format_response
 
 player_bp = Blueprint("api", __name__)
 
 
 @player_bp.route("/register", methods=["POST"])
+@format_response
 def register():
     data = request.json
     if not data or not "name" in data or not "email" in data or not "password" in data:
@@ -19,4 +23,4 @@ def register():
     player.set_password(data["password"])
     db.session.add(player)
     db.session.commit()
-    return jsonify({"message": "Registration successful"}), 201
+    return jsonify({"message": "Registration successful", "id": player.id}), 201

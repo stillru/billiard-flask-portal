@@ -6,5 +6,9 @@ class Season(db.Model):
     name = db.Column(db.String(64), nullable=False)
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
-    games = db.relationship("Game", backref="season", lazy=True)
-    tournaments = db.relationship("Tournament", backref="season", lazy=True)
+    games = db.relationship(
+        "Game", back_populates="season"
+    )  # Changed from backref to back_populates
+    tournaments = db.relationship(
+        "Tournament", back_populates="season"
+    )  # Ensure Tournament also uses back_populates

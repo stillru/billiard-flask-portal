@@ -1,18 +1,27 @@
 import subprocess
 import os
 
+
 def run_backend():
-    backend_path = os.path.join(os.getcwd(), 'backend', 'back.py')
-    return subprocess.Popen(['python', backend_path], cwd=os.path.join(os.getcwd(), 'backend'))
+    backend_path = os.path.join(os.getcwd(), "backend", "app.py")
+    return subprocess.Popen(
+        ["python", backend_path], cwd=os.path.join(os.getcwd(), "backend")
+    )
+
 
 def run_frontend():
-    frontend_path = os.path.join(os.getcwd(), 'frontend', 'front.py')
-    return subprocess.Popen(['python', frontend_path], cwd=os.path.join(os.getcwd(), 'frontend'))
+    frontend_path = os.path.join(os.getcwd(), "frontend", "front.py")
+    return subprocess.Popen(
+        ["python", frontend_path], cwd=os.path.join(os.getcwd(), "frontend")
+    )
 
 
 def run_db():
-    frontend_path = os.path.join(os.getcwd(), 'database', 'docker-compose.yaml')
-    return subprocess.Popen(['docker', 'compose', 'up'], cwd=os.path.join(os.getcwd(), 'database'))
+    frontend_path = os.path.join(os.getcwd(), "database", "docker-compose.yaml")
+    return subprocess.Popen(
+        ["docker", "compose", "up"], cwd=os.path.join(os.getcwd(), "database")
+    )
+
 
 if __name__ == "__main__":
     database_process = run_db()
