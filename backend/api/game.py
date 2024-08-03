@@ -2,7 +2,7 @@ import datetime
 
 from flask import Blueprint, request, jsonify
 from extensions import db
-from models import Game, Play
+from models import Game, Play, PlayEvent
 from decorators import format_response
 
 game_bp = Blueprint("game_bp", __name__)
@@ -46,6 +46,48 @@ def get_plays(game_id):
         jsonify({"count": games, "items": [play.to_dict() for play in plays]}),
         200,
     )
+
+
+@game_bp.route("/game/<int:game_id>/play/<int:play_id>", methods=["GET"])
+@format_response
+def get_play_events(play_id, game_id):
+    play_event = db.session.query(PlayEvent).filter_by(play_id=play_id, game_id=game_id).all()
+    if len(play_event) == 0:
+        return jsonify({"message": "No play event found"}), 404
+    else:
+        event_count = len(play_event)
+        return jsonify({"count": event_count, "items": [event.to_dict() for event in play_event]}), 200
+
+
+@game_bp.route("/game/<int:game_id>/play/<int:play_id>", methods=["POST"])
+@format_response
+def insert_event(play_id, game_id):
+    data = request.get_json()
+    play_id = play_id
+    player_id = data.get("player_id")
+    event_type = data.get("event_type")
+    event_time = datetime.datetime.utcnow()
+    if event_type == 'score':
+        ball_number = data.get("ball_number")
+        details = f"Player {player_id} {event_type} ball #{ball_number}"
+    elif event_type == 'win':
+        ball_number = data.get("ball_number")
+        details = f"Player {player_id} wins with scorin ball #{ball_number}"
+    elif event_type == 'fol':
+        details = f"Player {player_id} made fall, change side"
+        ball_number = None
+    new_play_event = PlayEvent(
+        game_id=game_id,
+        play_id=play_id,
+        player_id=player_id,
+        event_type=event_type,
+        ball_number=ball_number,
+        event_time=event_time,
+        details=details,
+    )
+    db.session.add(new_play_event)
+    db.session.commit()
+    return jsonify({"message": "Event created", "result": new_play_event.to_dict()}), 201
 
 
 @game_bp.route("/game/<int:game_id>/end", methods=["POST"])
