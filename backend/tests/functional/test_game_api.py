@@ -2,6 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def test_create_game(client):
     player1 = client.post(
         "/api/register",
@@ -62,6 +63,54 @@ def test_list_multiple_plays(client):
     logger.info(json_data)
     assert plays.status_code == 200
     assert json_data["data"]["count"] == 3
+
+
+def test_insert_play_event(client):
+    insert1 = client.post(
+        "/api/game/1/play/1",
+        json={
+            "play_id": "1",
+            "player_id": 1,
+            "event_type": "score",
+            "ball_number": 4
+        },
+    )
+    json_data = insert1.get_json()
+    logger.info(json_data)
+    insert2 = client.post(
+        "/api/game/1/play/1",
+        json={
+            "play_id": "1",
+            "player_id": 1,
+            "event_type": "fol",
+            "ball_number": 4
+        },
+    )
+    json_data = insert2.get_json()
+    logger.info(json_data)
+    insert3 = client.post(
+        "/api/game/1/play/1",
+        json={
+            "play_id": "1",
+            "player_id": 1,
+            "event_type": "win",
+            "ball_number": 5
+        },
+    )
+    json_data = insert3.get_json()
+    logger.info(json_data)
+    assert insert1.status_code == 201
+    assert insert2.status_code == 201
+    assert insert3.status_code == 201
+
+
+def test_get_play_event(client):
+    read = client.get(
+        "/api/game/1/play/1"
+    )
+    json_data = read.get_json()
+    logger.info(json_data)
+    assert read.status_code == 200
 
 
 def test_wrong_game(client):
