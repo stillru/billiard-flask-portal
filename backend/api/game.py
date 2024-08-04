@@ -1,3 +1,10 @@
+'''
+Game API
+--------
+
+Represent endpoints for managing games.
+'''
+
 import datetime
 
 from flask import Blueprint, request, jsonify
@@ -11,6 +18,11 @@ game_bp = Blueprint("game_bp", __name__)
 @game_bp.route("/game", methods=["POST"])
 @format_response
 def create_game():
+    '''
+    Create a new game.
+
+    :return:
+    '''
     data = request.get_json()
     player1_id = data.get("player1_id")
     player2_id = data.get("player2_id")
@@ -24,6 +36,12 @@ def create_game():
 @game_bp.route("/game/<int:game_id>/plays", methods=["POST"])
 @format_response
 def add_party(game_id):
+    '''
+    Add a play to a game. Each game contains one or more plays.
+
+    :param game_id:
+    :return:
+    '''
     data = request.get_json()
     type_id = data.get("type_id")
 

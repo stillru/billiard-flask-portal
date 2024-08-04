@@ -1,3 +1,10 @@
+'''
+Events api
+++++++++++
+
+Route querys to several API endpoints. Depend on event type.
+
+'''
 import requests
 from flask import Blueprint, request, jsonify, url_for, current_app
 
@@ -11,12 +18,17 @@ from decorators import format_response
 
 event_bp = Blueprint("event_bp", __name__)
 
-API_BASE_URL = "http://localhost:5000/api/"  # Replace with your API base URL
-
 
 @event_bp.route("/events", methods=["POST"])
 @format_response
 def manage_event():
+    '''
+    Router finction for managing events.
+
+    Endpoint: POST /api/events
+
+    :return:
+    '''
     data = request.get_json()
 
     event_type = data.get("event_type")
@@ -56,7 +68,6 @@ def manage_event():
             }
             return jsonify(new_event), 200
         elif event_type == "player_scored":
-            #TODO: Shold be implemented
             response = client.post(
                 f"/game/{data.get('game_id')}/plays/scored",
                 json={
@@ -101,6 +112,12 @@ def manage_event():
 
 
 def to_dict(self):
+    '''
+    Hepler function for converting event to dict
+
+    :param self:
+    :return: dict
+    '''
     return {
         "id": self.id,
         "party_id": self.party_id,

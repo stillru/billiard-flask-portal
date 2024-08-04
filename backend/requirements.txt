@@ -8,3 +8,5 @@ Flask-Migrate
 sqlalchemy-libsql
 pytest
 pytest-flask
+sphinx
+sphinx_rtd_theme
