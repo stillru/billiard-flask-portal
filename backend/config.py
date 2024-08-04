@@ -2,6 +2,9 @@ import logging
 
 
 class Config(object):
+    '''
+    Base configuration class
+    '''
     FLASK_ENV = "development"
     DEBUG = False
     TESTING = False
@@ -20,14 +23,23 @@ class Config(object):
 
 
 class TestConfig(Config):
+    '''
+    Test configuration
+    '''
     TESTING = True
     LOG_LEVEL = logging.DEBUG
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
 
 
 class ProductionConfig(Config):
+    '''
+    Production configuration
+    '''
     FLASK_ENV = "production"
 
 
 class DevelopmentConfig(Config):
+    '''
+    Development configuration
+    '''
     DEBUG = True

@@ -9,10 +9,22 @@ from config import Config as config
 
 
 def configure_logging(self):
+    '''
+    Function to configure the logging for the application
+
+    :param self:
+    :return:
+    '''
     logging.basicConfig(level=self.LOG_LEVEL, format=self.LOG_FORMAT)
 
 
 def create_app(config):
+    '''
+    Function to create the flask application
+
+    :param config:
+    :return:
+    '''
     app = Flask(__name__)
     app.config.from_object(config)
     db.init_app(app)
