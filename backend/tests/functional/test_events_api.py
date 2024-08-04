@@ -51,12 +51,15 @@ def test_event_player_scored(client):
     scored = client.post(
         "/api/events",
         json={
+            "play_id": 1,
+            "type_id": 1,
+            "game_id": 1,
             "event_type": "player_scored",
+            "event_eventtype": "score",
             "player_id": 1,
             "ball_number": 2,
-            "details": f"Player 1 scored ball 2",
         },
     )
     json_data = scored.get_json()
     logger.info(f"Event: {json_data}")
-    assert scored.status_code != 200
+    assert scored.status_code == 200

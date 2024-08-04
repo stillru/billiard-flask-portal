@@ -33,7 +33,8 @@ class Play(db.Model):
 class PlayEvent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     play_id = db.Column(db.Integer, db.ForeignKey("play.id"), nullable=False)
-    player_id = db.Column(db.Integer, db.ForeignKey("player.id"), nullable=True)
+    game_id = db.Column(db.Integer, db.ForeignKey("game.id"), nullable=False)
+    player_id = db.Column(db.Integer, db.ForeignKey("player.id"), nullable=False)
     event_type = db.Column(db.String(50), nullable=False)
     ball_number = db.Column(db.Integer, nullable=True)
     event_time = db.Column(
@@ -43,6 +44,19 @@ class PlayEvent(db.Model):
 
     play = db.relationship("Play", foreign_keys=[play_id])
     player = db.relationship("Player", foreign_keys=[player_id])
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "play_id": self.play_id,
+            "player_id": self.player_id,
+            "event_type": self.event_type,
+            "ball_number": self.ball_number,
+            "event_time": self.event_time,
+            "details": self.details,
+            "play": self.play,
+            "player": self.player
+        }
 
 
 class PlayType(db.Model):

@@ -12,9 +12,12 @@ from api.game import create_game
 
 event_bp = Blueprint("event_bp", __name__)
 
-from flask import Blueprint, request, jsonify
 from models import Play, PlayEvent, WinReason
+from flask import Blueprint, request, jsonify, current_app
 from decorators import format_response
+import logging
+
+logger = logging.getLogger(__name__)
 
 event_bp = Blueprint("event_bp", __name__)
 
@@ -69,18 +72,21 @@ def manage_event():
             return jsonify(new_event), 200
         elif event_type == "player_scored":
             response = client.post(
-                f"/game/{data.get('game_id')}/plays/scored",
+                f"/api/game/{data.get('game_id')}/play/{data.get('play_id')}",
                 json={
                     "player_id": data.get("player_id"),
-                    "event_type": event_type,
-                    "ball_number": data.get("ball_number"),
-                    "details": f"Player {data.get('player_id')} scored ball {data.get('ball_number')}",
+                    "event_type": data.get("event_eventtype"),
+                    "ball_number": data.get("ball_number")
                 },
             )
             if response.status_code != 201:
-                return jsonify({"error": "Failed to record score"}), 400
-            new_event = response.get_json()
-
+                return jsonify({"error": "Failed to record score", "details": response.get_json()}), 400
+            new_playevent = response.get_json()
+            new_event = {
+                "event_type": event_type,
+                "results": new_playevent["data"]
+            }
+            return jsonify(new_event), 200
         elif event_type == "end_party":
             response = client.get(f"/winreasons/{data.get('win_reason_id')}")
             if response.status_code != 200:
@@ -120,7 +126,7 @@ def to_dict(self):
     '''
     return {
         "id": self.id,
-        "party_id": self.party_id,
+        "play_id": self.play_id,
         "player_id": self.player_id,
         "event_type": self.event_type,
         "ball_number": self.ball_number,
