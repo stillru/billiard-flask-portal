@@ -2,6 +2,7 @@ import logging
 
 from flask import Flask
 from flask_cors import CORS
+from flask_migrate import upgrade
 
 from backend.api import player_bp, news_bp, game_bp, event_bp
 from backend.extensions import db, migrate
@@ -39,7 +40,10 @@ def create_app(config=None):
         app.register_blueprint(game_bp, url_prefix="/api", name="game_api")
         app.register_blueprint(event_bp, url_prefix="/api", name="event_api")
         if 'TestConfig' in config:
-           db.create_all()
+            upgrade()
+            logger.debug("Database upgraded from migrations...")
+            for table_name in db.metadata.tables.keys():
+                print(table_name)
     return app
 
 
