@@ -38,7 +38,8 @@ def create_app(config=None):
         app.register_blueprint(news_bp, url_prefix="/api", name="news_api")
         app.register_blueprint(game_bp, url_prefix="/api", name="game_api")
         app.register_blueprint(event_bp, url_prefix="/api", name="event_api")
-        db.create_all()
+        if 'TestConfig' in config:
+           db.create_all()
     return app
 
 

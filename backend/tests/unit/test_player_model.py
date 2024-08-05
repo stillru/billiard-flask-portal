@@ -1,4 +1,4 @@
-from models.player import Player, User
+from backend.models.player import Player, User
 import logging
 
 from backend.extensions import db
@@ -6,7 +6,7 @@ from backend.extensions import db
 logger = logging.getLogger(__name__)
 
 
-'''def test_new_user(app):
+def test_new_user(app):
     """
     GIVEN a User model
     WHEN a new User is created
@@ -23,4 +23,3 @@ def test_new_player(client):
     player = Player(user.id, 1, 1)
     logger.debug(player)
     assert player is not None
-'''

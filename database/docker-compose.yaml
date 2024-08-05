@@ -7,6 +7,6 @@ services:
       - "5003:5001"
     environment:
       - SQLD_NODE=primary
-      - SQLD_AUTH_JWT_KEY=Pu07X9ImKOMEQVuVXmjxU5NYSOZLdr9_232E9CBJic0
+      - SQLD_AUTH_JWT_KEY=SfFY5hvsTf-ElEBukKaZjcVBJwwpnpHu-I6CAYFf7Wc
     volumes:
       - ./data/libsql:/var/lib/sqld
