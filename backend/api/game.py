@@ -8,9 +8,9 @@ Represent endpoints for managing games.
 import datetime
 
 from flask import Blueprint, request, jsonify
-from extensions import db
-from models import Game, Play, PlayEvent
-from decorators import format_response
+from backend.extensions import db
+from backend.models import Game, Play, PlayEvent
+from backend.decorators import format_response
 
 from backend.models import Player
 

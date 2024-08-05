@@ -1,9 +1,9 @@
 from flask import request, jsonify, Blueprint
 
-from models.player import Player, User
-from extensions import db
+from backend.models.player import Player, User
+from backend.extensions import db
 
-from decorators import format_response
+from backend.decorators import format_response
 
 player_bp = Blueprint("api", __name__)
 

@@ -1,10 +1,7 @@
 from flask import request, jsonify, Blueprint
 
-from extensions import db
-from models import Club
-from models import Game
-from models import News
-from models import Tournament
+from backend.extensions import db
+from backend.models import Club, Game, Tournament, News
 
 news_bp = Blueprint("api", __name__)
 

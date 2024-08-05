@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from extensions import db
+from backend.extensions import db
 
 
 class Tag(db.Model):

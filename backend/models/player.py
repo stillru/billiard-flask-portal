@@ -1,7 +1,7 @@
 import os
 
 import pyscrypt
-from extensions import db
+from backend.extensions import db
 from flask_security import UserMixin, RoleMixin
 
 

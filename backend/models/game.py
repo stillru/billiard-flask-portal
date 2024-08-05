@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from extensions import db
+from backend.extensions import db
 
 
 class Game(db.Model):

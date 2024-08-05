@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
-from extensions import db
+from backend.extensions import db
 
 # Ассоциативная таблица для связи многие-ко-многим между новостями и тегами
 news_tags = db.Table(

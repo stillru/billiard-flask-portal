@@ -10,3 +10,4 @@ pytest
 pytest-flask
 sphinx
 sphinx_rtd_theme
+flask-security

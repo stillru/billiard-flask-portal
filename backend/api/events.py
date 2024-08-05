@@ -5,16 +5,13 @@ Events api
 Route querys to several API endpoints. Depend on event type.
 
 '''
-import requests
-from flask import Blueprint, request, jsonify, url_for, current_app
-
-from api.game import create_game
+from flask import Blueprint
 
 event_bp = Blueprint("event_bp", __name__)
 
-from models import Play, PlayEvent, WinReason
+from backend.models import PlayEvent
 from flask import Blueprint, request, jsonify, current_app
-from decorators import format_response
+from backend.decorators import format_response
 import logging
 
 logger = logging.getLogger(__name__)

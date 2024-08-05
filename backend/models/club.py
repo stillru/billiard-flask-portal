@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text
 from sqlalchemy.orm import relationship
-from extensions import db
+from backend.extensions import db
 
 '''
 Clubs representation

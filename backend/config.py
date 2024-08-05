@@ -12,7 +12,7 @@ class Config(object):
     LOG_LEVEL = logging.INFO
     LOG_FORMAT = "[BACKEND] %(asctime)s - %(name)s - %(levelname)s - %(message)s"
     SECRET_KEY = "just_play"
-    token = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjI3MzkyNzZ9.TK17rHBCyk0Fwd8xPozoGZx0hF5EW-d5NVrRNHNzM7LSjVGoMU1szSUC0PYw9ZM9G8iShHgv4D1KQF-0l0NbDw"
+    token = "eyJhbGciOiAiRWREU0EiLCAidHlwIjogIkpXVCJ9.eyJleHAiOiAxNzU0Mzc0OTUyfQ.cuRAe9wOE_AuJphvR_dN_M_eesJ3KEt_dEDvVBB_mXdWfwZPp6X6fJXNP1gkixCiDt2mWmap1imaS_y69oIkCw"
     SQLALCHEMY_DATABASE_URI = (
         f"sqlite+libsql://localhost:5002/?authToken={token}&secure=false"
     )
