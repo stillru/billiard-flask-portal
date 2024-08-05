@@ -10,6 +10,7 @@ def test_create_game(client):
             "name": "John Doe",
             "email": "test1@example.com",
             "password": "password123",
+            "new_player": False
         },
     )
     player2 = client.post(
@@ -18,12 +19,13 @@ def test_create_game(client):
             "name": "John Doe",
             "email": "test2@example.com",
             "password": "password123",
+            "new_player": False
         },
     )
     data_player1 = player1.get_json()
     data_player2 = player2.get_json()
-    print(data_player1)
-    print(data_player2)
+    logger.info(data_player1)
+    logger.info(data_player2)
     response = client.post(
         "/api/game",
         json={
@@ -32,7 +34,7 @@ def test_create_game(client):
         },
     )
     json_data = response.get_json()
-    logger.info(f'Created game with ID: {json_data["data"]}')
+    logger.debug(f'Created game with ID: {json_data["data"]}')
     assert response.status_code == 201
 
 
@@ -42,14 +44,14 @@ def test_create_play(client):
         json={"type_id": 1, "game_id": 1},
     )
     json_data = play.get_json()
-    logger.info(json_data)
+    logger.debug(json_data)
     assert play.status_code == 201
 
 
 def test_list_plays(client):
     plays = client.get("/api/game/1/plays")
     json_data = plays.get_json()
-    logger.info(json_data)
+    logger.debug(json_data)
     assert plays.status_code == 200
 
 
@@ -60,7 +62,7 @@ def test_list_multiple_plays(client):
     )
     plays = client.get("/api/game/1/plays")
     json_data = plays.get_json()
-    logger.info(json_data)
+    logger.debug(json_data)
     assert plays.status_code == 200
     assert json_data["data"]["count"] == 3
 
@@ -76,7 +78,7 @@ def test_insert_play_event(client):
         },
     )
     json_data = insert1.get_json()
-    logger.info(json_data)
+    logger.debug(json_data)
     insert2 = client.post(
         "/api/game/1/play/1",
         json={
@@ -87,7 +89,7 @@ def test_insert_play_event(client):
         },
     )
     json_data = insert2.get_json()
-    logger.info(json_data)
+    logger.debug(json_data)
     insert3 = client.post(
         "/api/game/1/play/1",
         json={
@@ -98,7 +100,7 @@ def test_insert_play_event(client):
         },
     )
     json_data = insert3.get_json()
-    logger.info(json_data)
+    logger.debug(json_data)
     assert insert1.status_code == 201
     assert insert2.status_code == 201
     assert insert3.status_code == 201
@@ -109,7 +111,7 @@ def test_get_play_event(client):
         "/api/game/1/play/1"
     )
     json_data = read.get_json()
-    logger.info(json_data)
+    logger.debug(json_data)
     assert read.status_code == 200
 
 
@@ -119,7 +121,7 @@ def test_wrong_game(client):
         json={"winner_id": 1, "score_player1": 4, "score_player2": 2},
     )
     json_data = wrong.get_json()
-    logger.info(json_data)
+    logger.debug(json_data)
     assert wrong.status_code == 400
 
 
@@ -129,5 +131,5 @@ def test_end_game(client):
         json={"winner_id": 1, "score_player1": 4, "score_player2": 2},
     )
     json_data = end.get_json()
-    logger.info(json_data)
+    logger.debug(json_data)
     assert end.status_code == 200

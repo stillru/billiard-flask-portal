@@ -35,9 +35,9 @@ def _db(app):
     db.app = app
     db.create_all()
     migrate.init_app(app, db)
-    logger.info("Created test database")
+    logger.debug("Created test database")
     upgrade()
-    logger.info("Database upgraded with migrations")
+    logger.debug("Database upgraded with migrations")
     # Print all table names
     print("Tables in the database:")
     for table_name in db.metadata.tables.keys():
@@ -53,6 +53,6 @@ def _db(app):
     yield db
 
     db.session.remove()
-    logger.info("Session removed")
+    logger.debug("Session removed")
     db.drop_all()
-    logger.info("Database dropped")
+    logger.debug("Database dropped")

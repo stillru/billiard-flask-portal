@@ -12,6 +12,8 @@ from extensions import db
 from models import Game, Play, PlayEvent
 from decorators import format_response
 
+from backend.models import Player
+
 game_bp = Blueprint("game_bp", __name__)
 
 
@@ -85,12 +87,16 @@ def insert_event(play_id, game_id):
     player_id = data.get("player_id")
     event_type = data.get("event_type")
     event_time = datetime.datetime.utcnow()
+    player = db.session.query(Player).filter_by(id=player_id).first()
     if event_type == 'score':
         ball_number = data.get("ball_number")
         details = f"Player {player_id} {event_type} ball #{ball_number}"
     elif event_type == 'win':
         ball_number = data.get("ball_number")
         details = f"Player {player_id} wins with scorin ball #{ball_number}"
+        player.score = Player.played_games + 1
+        db.session.add(player)
+        db.session.commit()
     elif event_type == 'fol':
         details = f"Player {player_id} made fall, change side"
         ball_number = None
@@ -105,6 +111,7 @@ def insert_event(play_id, game_id):
     )
     db.session.add(new_play_event)
     db.session.commit()
+
     return jsonify({"message": "Event created", "result": new_play_event.to_dict()}), 201
 
 

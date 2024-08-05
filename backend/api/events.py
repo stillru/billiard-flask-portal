@@ -35,7 +35,9 @@ def manage_event():
     data = request.get_json()
 
     event_type = data.get("event_type")
-    if event_type not in ["start_game", "player_scored", "end_game", "start_play", "update_play", "end_play"]:
+    if event_type not in [
+        "start_game", "player_scored", "end_game", "start_play",
+        "update_play", "end_play"]:
         return jsonify({"error": "Invalid event type"}), 400
 
     with current_app.test_client() as client:

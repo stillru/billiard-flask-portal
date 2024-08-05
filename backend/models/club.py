@@ -1,9 +1,11 @@
 from sqlalchemy import Column, Integer, String, Text
 from sqlalchemy.orm import relationship
 from extensions import db
+
 '''
 Clubs representation
 '''
+
 
 class Club(db.Model):
     id = Column(Integer, primary_key=True)
@@ -20,6 +22,12 @@ class Club(db.Model):
     '''
     For sorting news from this club
     '''
+
+    def __init__(self, name: str):
+        """
+        Create a new Club object with the given name.
+        """
+        self.name = name
 
     def __repr__(self):
         return f"<Club {self.name}>"
