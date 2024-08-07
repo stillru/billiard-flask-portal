@@ -1,11 +1,15 @@
 import subprocess
 import os
+import sys
 
 
 def run_backend():
     backend_path = os.path.join(os.getcwd(), "backend", "app.py")
+    # Set the PYTHONPATH environment variable to the project root
+    env = os.environ.copy()
+    env["PYTHONPATH"] = os.getcwd()
     return subprocess.Popen(
-        ["python", backend_path], cwd=os.path.join(os.getcwd(), "backend")
+        ["python", backend_path], cwd=os.path.join(os.getcwd(), "backend"), env=env
     )
 
 

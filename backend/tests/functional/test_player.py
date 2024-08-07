@@ -1,6 +1,4 @@
-import logging
-
-logger = logging.getLogger(__name__)
+from .. import log
 
 
 def test_register_success(client):
@@ -14,7 +12,7 @@ def test_register_success(client):
         },
     )
     json_data = response.get_json()
-    logger.debug(json_data)
+    log.debug(json_data)
     assert response.status_code == 201
     assert json_data["data"]["message"] == "Registration successful"
 
@@ -30,7 +28,7 @@ def test_register_success_with_player(client):
         },
     )
     json_data = response.get_json()
-    logger.debug(json_data)
+    log.debug(json_data)
     assert response.status_code == 201
     assert json_data["data"]["message"] == "Registration successful"
 
@@ -40,7 +38,7 @@ def test_register_missing_data(client):
         "/api/register", json={"name": "John Doe", "email": "john@example.com"}
     )
     json_data = response.get_json()
-    logger.debug(json_data)
+    log.debug(json_data)
     assert response.status_code == 400
     assert json_data["data"]["error"] == "Invalid input"
 
@@ -66,8 +64,8 @@ def test_register_duplicate_email(client):
     )
     user1_json_data = user1.get_json()
     user2_json_data = user2.get_json()
-    logger.debug(user1_json_data)
-    logger.debug(user2_json_data)
+    log.debug(user1_json_data)
+    log.debug(user2_json_data)
     assert user1_json_data["status"] == 201
     assert user2_json_data["status"] == 400
     assert user2_json_data["data"]["error"] == "Player already exists"

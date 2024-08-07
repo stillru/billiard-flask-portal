@@ -1,6 +1,4 @@
-import logging
-
-logger = logging.getLogger(__name__)
+from .. import log
 
 
 def test_event_create_game(client):
@@ -23,9 +21,9 @@ def test_event_create_game(client):
         },
     )
     data_player1 = player1.get_json()
-    logger.debug(data_player1)
+    log.debug(data_player1)
     data_player2 = player2.get_json()
-    logger.debug(data_player2)
+    log.debug(data_player2)
     response = client.post(
         "/api/events",
         json={
@@ -35,7 +33,7 @@ def test_event_create_game(client):
         },
     )
     json_data = response.get_json()
-    logger.debug(f"Event: {json_data}")
+    log.debug(f"Event: {json_data}")
     assert response.status_code == 200
 
 
@@ -49,7 +47,7 @@ def test_event_create_play(client):
         },
     )
     json_data = play.get_json()
-    logger.debug(f"Event: {json_data}")
+    log.debug(f"Event: {json_data}")
     assert play.status_code == 200
 
 
@@ -67,5 +65,5 @@ def test_event_player_scored(client):
         },
     )
     json_data = scored.get_json()
-    logger.debug(f"Event: {json_data}")
+    log.debug(f"Event: {json_data}")
     assert scored.status_code == 200
