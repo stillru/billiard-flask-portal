@@ -2,10 +2,11 @@ import logging
 
 
 class Config(object):
-    '''
+    """
     Base configuration class
-    '''
-    LOGGER_NAME = 'default_logger'
+    """
+
+    LOGGER_NAME = "default_logger"
     FLASK_ENV = "development"
     DEBUG = False
     TESTING = False
@@ -26,10 +27,11 @@ class Config(object):
 
 
 class TestConfig(Config):
-    '''
+    """
     Test configuration
-    '''
-    LOGGER_NAME = 'test_logger'
+    """
+
+    LOGGER_NAME = "test_logger"
     TESTING = True
     LOG_LEVEL = logging.DEBUG
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
@@ -37,9 +39,10 @@ class TestConfig(Config):
 
 
 class ProductionConfig(Config):
-    '''
+    """
     Production configuration
-    '''
+    """
+
     LOGGER_NAME = "prod_logger"
     FLASK_ENV = "production"
     LOG_LEVEL = "INFO"
@@ -47,7 +50,8 @@ class ProductionConfig(Config):
 
 
 class DevelopmentConfig(Config):
-    '''
+    """
     Development configuration
-    '''
+    """
+
     DEBUG = True

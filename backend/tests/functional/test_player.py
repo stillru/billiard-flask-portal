@@ -8,7 +8,7 @@ def test_register_success(client):
             "name": "John Doe",
             "email": "john@example.com",
             "password": "password123",
-            "new_player": False
+            "new_player": False,
         },
     )
     json_data = response.get_json()
@@ -24,7 +24,7 @@ def test_register_success_with_player(client):
             "name": "John Doe",
             "email": "john876@example.com",
             "password": "password123",
-            "new_player": True
+            "new_player": True,
         },
     )
     json_data = response.get_json()
@@ -50,7 +50,7 @@ def test_register_duplicate_email(client):
             "name": "John Doe",
             "email": "john5@example.com",
             "password": "password123",
-            "new_player": False
+            "new_player": False,
         },
     )
     user2 = client.post(
@@ -59,7 +59,7 @@ def test_register_duplicate_email(client):
             "name": "Jane Doe",
             "email": "john5@example.com",
             "password": "password456",
-            "new_player": False
+            "new_player": False,
         },
     )
     user1_json_data = user1.get_json()
