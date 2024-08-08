@@ -3,10 +3,9 @@ import sys
 
 import pytest
 
-from backend.config import TestConfig
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+from backend.config import TestConfig
 from backend.app import create_app
 from backend.extensions import db
 
@@ -22,7 +21,6 @@ def app():
     """Create a Flask application instance for testing."""
     app = create_app(TestConfig)
     with app.app_context():
-
         yield app
 
         # Cleanup after tests
