@@ -10,13 +10,13 @@ from backend.config import Config, ProductionConfig, TestConfig, DevelopmentConf
 
 
 def create_app(config_class=ProductionConfig):
-    '''
+    """
     Function to create the flask application
 
     :param config_class:
     :param config:
     :return:
-    '''
+    """
     app = Flask(__name__)
     app.config.from_object(config_class)
     config_class.configure_logging()
@@ -30,21 +30,18 @@ def create_app(config_class=ProductionConfig):
         app.register_blueprint(event_bp, url_prefix="/api", name="event_api")
         if config_class.TESTING:
             # Initialize the database for testing
-            #db.create_all()
-            logger = logging.getLogger()
-            original_level = logger.level  # Store the original logging level
-            logger.setLevel(logging.CRITICAL)  # Temporarily set the logging level to CRITICAL
-            try:
-                upgrade(directory="backend/migrations")
-            finally:
-                logger.setLevel(original_level)  # Restore the original logging level
+            # db.create_all()
+            upgrade(directory="backend/migrations")
             config_class.configure_logging()
+            for rule in app.url_map.iter_rules():
+                logging.log(20, f"Endpoint: {rule.endpoint}, URL: {rule.rule}")
     return app
 
 
 if __name__ == "__main__":
-    app = create_app()
+    app = create_app(ProductionConfig)
+    ProductionConfig.configure_logging()
     with app.app_context():
         for rule in app.url_map.iter_rules():
-            print(f"Endpoint: {rule.endpoint}, URL: {rule.rule}")
+            logging.log(20, f"Endpoint: {rule.endpoint}, URL: {rule.rule}")
     app.run(debug=True, port=5000)

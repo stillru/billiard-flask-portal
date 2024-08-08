@@ -8,7 +8,7 @@ def test_create_game(client):
             "name": "John Doe",
             "email": "test1@example.com",
             "password": "password123",
-            "new_player": False
+            "new_player": False,
         },
     )
     player2 = client.post(
@@ -17,7 +17,7 @@ def test_create_game(client):
             "name": "John Doe",
             "email": "test2@example.com",
             "password": "password123",
-            "new_player": False
+            "new_player": False,
         },
     )
     data_player1 = player1.get_json()
@@ -68,34 +68,19 @@ def test_list_multiple_plays(client):
 def test_insert_play_event(client):
     insert1 = client.post(
         "/api/game/1/play/1",
-        json={
-            "play_id": "1",
-            "player_id": 1,
-            "event_type": "score",
-            "ball_number": 4
-        },
+        json={"play_id": "1", "player_id": 1, "event_type": "score", "ball_number": 4},
     )
     json_data = insert1.get_json()
     log.debug(json_data)
     insert2 = client.post(
         "/api/game/1/play/1",
-        json={
-            "play_id": "1",
-            "player_id": 1,
-            "event_type": "fol",
-            "ball_number": 4
-        },
+        json={"play_id": "1", "player_id": 1, "event_type": "fol", "ball_number": 4},
     )
     json_data = insert2.get_json()
     log.debug(json_data)
     insert3 = client.post(
         "/api/game/1/play/1",
-        json={
-            "play_id": "1",
-            "player_id": 1,
-            "event_type": "win",
-            "ball_number": 5
-        },
+        json={"play_id": "1", "player_id": 1, "event_type": "win", "ball_number": 5},
     )
     json_data = insert3.get_json()
     log.debug(json_data)
@@ -105,9 +90,7 @@ def test_insert_play_event(client):
 
 
 def test_get_play_event(client):
-    read = client.get(
-        "/api/game/1/play/1"
-    )
+    read = client.get("/api/game/1/play/1")
     json_data = read.get_json()
     log.debug(json_data)
     assert read.status_code == 200

@@ -14,9 +14,7 @@ class Game(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     ended_at = db.Column(db.DateTime, nullable=True)
     winner_id = db.Column(db.Integer, db.ForeignKey("player.id"), nullable=True)
-    plays = db.relationship(
-        "Play", back_populates="game", cascade="all, delete-orphan"
-    )
+    plays = db.relationship("Play", back_populates="game", cascade="all, delete-orphan")
 
     player1 = db.relationship("Player", foreign_keys=[player1_id])
     player2 = db.relationship("Player", foreign_keys=[player2_id])

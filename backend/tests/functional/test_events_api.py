@@ -8,7 +8,7 @@ def test_event_create_game(client):
             "name": "John Doe",
             "email": "test7@example.com",
             "password": "password123",
-            "new_player": True
+            "new_player": True,
         },
     )
     player2 = client.post(
@@ -17,7 +17,7 @@ def test_event_create_game(client):
             "name": "John Doe",
             "email": "test8@example.com",
             "password": "password123",
-            "new_player": True
+            "new_player": True,
         },
     )
     data_player1 = player1.get_json()
@@ -40,11 +40,7 @@ def test_event_create_game(client):
 def test_event_create_play(client):
     play = client.post(
         "/api/events",
-        json={
-            "event_type": "start_play",
-            "type_id": 1,
-            "game_id": 1
-        },
+        json={"event_type": "start_play", "type_id": 1, "game_id": 1},
     )
     json_data = play.get_json()
     log.debug(f"Event: {json_data}")

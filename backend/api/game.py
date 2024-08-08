@@ -1,9 +1,9 @@
-'''
+"""
 Game API
 --------
 
 Represent endpoints for managing games.
-'''
+"""
 
 import datetime
 
@@ -20,11 +20,11 @@ game_bp = Blueprint("game_bp", __name__)
 @game_bp.route("/game", methods=["POST"])
 @format_response
 def create_game():
-    '''
+    """
     Create a new game.
 
     :return:
-    '''
+    """
     data = request.get_json()
     player1_id = data.get("player1_id")
     player2_id = data.get("player2_id")
@@ -38,12 +38,12 @@ def create_game():
 @game_bp.route("/game/<int:game_id>/plays", methods=["POST"])
 @format_response
 def add_party(game_id):
-    '''
+    """
     Add a play to a game. Each game contains one or more plays.
 
     :param game_id:
     :return:
-    '''
+    """
     data = request.get_json()
     type_id = data.get("type_id")
 
@@ -71,12 +71,22 @@ def get_plays(game_id):
 @game_bp.route("/game/<int:game_id>/play/<int:play_id>", methods=["GET"])
 @format_response
 def get_play_events(play_id, game_id):
-    play_event = db.session.query(PlayEvent).filter_by(play_id=play_id, game_id=game_id).all()
+    play_event = (
+        db.session.query(PlayEvent).filter_by(play_id=play_id, game_id=game_id).all()
+    )
     if len(play_event) == 0:
         return jsonify({"message": "No play event found"}), 404
     else:
         event_count = len(play_event)
-        return jsonify({"count": event_count, "items": [event.to_dict() for event in play_event]}), 200
+        return (
+            jsonify(
+                {
+                    "count": event_count,
+                    "items": [event.to_dict() for event in play_event],
+                }
+            ),
+            200,
+        )
 
 
 @game_bp.route("/game/<int:game_id>/play/<int:play_id>", methods=["POST"])
@@ -88,16 +98,16 @@ def insert_event(play_id, game_id):
     event_type = data.get("event_type")
     event_time = datetime.datetime.utcnow()
     player = db.session.query(Player).filter_by(id=player_id).first()
-    if event_type == 'score':
+    if event_type == "score":
         ball_number = data.get("ball_number")
         details = f"Player {player_id} {event_type} ball #{ball_number}"
-    elif event_type == 'win':
+    elif event_type == "win":
         ball_number = data.get("ball_number")
         details = f"Player {player_id} wins with scorin ball #{ball_number}"
         player.score = Player.played_games + 1
         db.session.add(player)
         db.session.commit()
-    elif event_type == 'fol':
+    elif event_type == "fol":
         details = f"Player {player_id} made fall, change side"
         ball_number = None
     new_play_event = PlayEvent(
@@ -112,7 +122,10 @@ def insert_event(play_id, game_id):
     db.session.add(new_play_event)
     db.session.commit()
 
-    return jsonify({"message": "Event created", "result": new_play_event.to_dict()}), 201
+    return (
+        jsonify({"message": "Event created", "result": new_play_event.to_dict()}),
+        201,
+    )
 
 
 @game_bp.route("/game/<int:game_id>/end", methods=["POST"])

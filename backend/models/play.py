@@ -55,7 +55,7 @@ class PlayEvent(db.Model):
             "event_time": self.event_time,
             "details": self.details,
             "play": self.play,
-            "player": self.player
+            "player": self.player,
         }
 
 

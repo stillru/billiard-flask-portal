@@ -28,18 +28,18 @@ pubkey_base64 = base64.b64encode(
         encoding=serialization.Encoding.Raw,
         format=serialization.PublicFormat.Raw,
     ),
-    altchars=b"-_"
-).decode('utf-8')
+    altchars=b"-_",
+).decode("utf-8")
 
 # Remove padding characters from the base64 string
-pubkey_base64 = pubkey_base64.rstrip('=')
+pubkey_base64 = pubkey_base64.rstrip("=")
 
 # Serialize private key to PEM format
 privkey_pem = privkey.private_bytes(
     encoding=serialization.Encoding.PEM,
     format=serialization.PrivateFormat.PKCS8,
     encryption_algorithm=serialization.NoEncryption(),
-).decode('utf-8')
+).decode("utf-8")
 
 # Create JWT claims
 exp = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365)
@@ -48,14 +48,15 @@ claims = {
 }
 
 # Manually create JWT header
-header = {
-    "alg": "EdDSA",
-    "typ": "JWT"
-}
+header = {"alg": "EdDSA", "typ": "JWT"}
 
 # Encode header and payload to base64
-header_b64 = base64.urlsafe_b64encode(json.dumps(header).encode()).rstrip(b'=').decode('utf-8')
-payload_b64 = base64.urlsafe_b64encode(json.dumps(claims).encode()).rstrip(b'=').decode('utf-8')
+header_b64 = (
+    base64.urlsafe_b64encode(json.dumps(header).encode()).rstrip(b"=").decode("utf-8")
+)
+payload_b64 = (
+    base64.urlsafe_b64encode(json.dumps(claims).encode()).rstrip(b"=").decode("utf-8")
+)
 
 # Create the unsigned token
 unsigned_token = f"{header_b64}.{payload_b64}"
@@ -64,17 +65,19 @@ unsigned_token = f"{header_b64}.{payload_b64}"
 signature = privkey.sign(unsigned_token.encode())
 
 # Encode signature to base64
-signature_b64 = base64.urlsafe_b64encode(signature).rstrip(b'=').decode('utf-8')
+signature_b64 = base64.urlsafe_b64encode(signature).rstrip(b"=").decode("utf-8")
 
 # Construct the JWT
 token = f"{unsigned_token}.{signature_b64}"
 
 # Add read-only claim and generate read-only token
 claims["a"] = "ro"
-payload_b64_ro = base64.urlsafe_b64encode(json.dumps(claims).encode()).rstrip(b'=').decode('utf-8')
+payload_b64_ro = (
+    base64.urlsafe_b64encode(json.dumps(claims).encode()).rstrip(b"=").decode("utf-8")
+)
 unsigned_token_ro = f"{header_b64}.{payload_b64_ro}"
 signature_ro = privkey.sign(unsigned_token_ro.encode())
-signature_b64_ro = base64.urlsafe_b64encode(signature_ro).rstrip(b'=').decode('utf-8')
+signature_b64_ro = base64.urlsafe_b64encode(signature_ro).rstrip(b"=").decode("utf-8")
 ro_token = f"{unsigned_token_ro}.{signature_b64_ro}"
 
 # Save public key to files

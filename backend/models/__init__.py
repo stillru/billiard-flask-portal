@@ -8,6 +8,6 @@ from .player import Player
 from .season import Season
 from .play import PlayType, Play, PlayEvent
 
-'''
+"""
 Module that represent db tables in flask
-'''
+"""

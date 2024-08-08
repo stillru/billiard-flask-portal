@@ -1,25 +1,35 @@
 import logging
-
 from flask import Flask, current_app
 
-from config import Config, configure_logging
+from config import Config, TestConfig
 from routes.auth import auth_bp
 from routes.common import common_bp
 
-app = Flask(__name__)
 
-# Настройка logging
-configure_logging()
-logger = logging.getLogger(__name__)
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
 
-# Регистрация Blueprint
-app.register_blueprint(auth_bp)
-app.register_blueprint(common_bp)
+    # Настройка logging
+    logger = logging.getLogger(__name__)
+
+    # Регистрация Blueprint
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(common_bp)
+
+    with app.app_context():
+        Config.configure_logging()
+        if config_class.TESTING:
+            config_class.configure_logging()
+            for rule in app.url_map.iter_rules():
+                logging.log(20, f"Endpoint: {rule.endpoint}, URL: {rule.rule}")
+
+    return app
 
 
 def get_routes():
     output = []
-    for rule in app.url_map.iter_rules():
+    for rule in current_app.url_map.iter_rules():
         methods = ",".join(sorted(rule.methods))
         endpoint = current_app.view_functions[rule.endpoint]
         metadata = getattr(endpoint, "_metadata", {})
@@ -36,14 +46,12 @@ def get_routes():
     return output
 
 
-@app.context_processor
 def inject_routes():
     return {"routes": get_routes()}
 
 
+# Creating and running the app
 if __name__ == "__main__":
-    with app.app_context():
-        print("FRONTEND ' Registered Endpoints:")
-        for rule in app.url_map.iter_rules():
-            print(f"Endpoint: {rule.endpoint}, URL: {rule.rule}")
-    app.run(debug=True, port=5001)
+    app = create_app()
+    app.context_processor(inject_routes)
+    app.run(debug=True, port=5001, host="0.0.0.0")
