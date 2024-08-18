@@ -3,10 +3,10 @@ Events api
 ++++++++++
 
 Route querys to several API endpoints. Depend on event type.
-
 """
 
 from flask import Blueprint
+
 
 event_bp = Blueprint("event_bp", __name__)
 

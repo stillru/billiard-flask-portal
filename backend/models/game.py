@@ -11,6 +11,7 @@ class Game(db.Model):
     score_player2 = db.Column(db.Integer, nullable=True)
     tournament_id = db.Column(db.Integer, db.ForeignKey("tournament.id"), nullable=True)
     season_id = db.Column(db.Integer, db.ForeignKey("season.id"), nullable=True)
+    is_finished = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     ended_at = db.Column(db.DateTime, nullable=True)
     winner_id = db.Column(db.Integer, db.ForeignKey("player.id"), nullable=True)

@@ -28,12 +28,12 @@ def run_db():
 
 
 if __name__ == "__main__":
-    database_process = run_db()
+    #database_process = run_db()
     backend_process = run_backend()
     frontend_process = run_frontend()
 
     try:
-        database_process.wait()
+        #database_process.wait()
         backend_process.wait()
         frontend_process.wait()
     except KeyboardInterrupt:

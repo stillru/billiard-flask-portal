@@ -15,9 +15,7 @@ class Config(object):
     LOG_FORMAT = "[BACKEND] %(asctime)s - %(name)s - %(levelname)s - %(message)s"
     SECRET_KEY = "just_play"
     token = "eyJhbGciOiAiRWREU0EiLCAidHlwIjogIkpXVCJ9.eyJleHAiOiAxNzU0Mzc0OTUyfQ.cuRAe9wOE_AuJphvR_dN_M_eesJ3KEt_dEDvVBB_mXdWfwZPp6X6fJXNP1gkixCiDt2mWmap1imaS_y69oIkCw"
-    SQLALCHEMY_DATABASE_URI = (
-        f"sqlite:///production.db"
-    )
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///production.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     @classmethod
@@ -47,6 +45,7 @@ class ProductionConfig(Config):
     FLASK_ENV = "production"
     LOG_LEVEL = "INFO"
     LOG_FORMAT = "[BACKEND - Prod] %(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///production.db"
 
 
 class DevelopmentConfig(Config):
