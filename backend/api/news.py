@@ -18,24 +18,19 @@ def handle_tags():
         tags = Tag.query.all()
         tags_list = []
         for tag in tags:
-            tags_list.append({
-                "id": tag.id,
-                "name": tag.name
-            })
+            tags_list.append({"id": tag.id, "name": tag.name})
         log.debug(f"list of tags: {jsonify(tags_list)}")
         return jsonify(tags_list), 200
     if request.method == "POST":
         data = request.get_json()
         log.info(data)
-        if 'name' not in data:
-            return jsonify({'errors': {'name': 'This field is required.'}}), 400
+        if "name" not in data:
+            return jsonify({"errors": {"name": "This field is required."}}), 400
         exist_tags = Tag.query.filter_by(name=data["name"]).first()
         if exist_tags:
             return jsonify({"errors": "This tag already in system"}), 400
         else:
-            new_tag = Tag(
-                name=data["name"]
-            )
+            new_tag = Tag(name=data["name"])
             db.session.add(new_tag)
             db.session.commit()
             return jsonify({"message": "New tag add", "id": new_tag.id}), 201
@@ -60,7 +55,7 @@ def handle_news():
                     "created_at": item.created_at.isoformat(),  # Форматируем дату в ISO 8601
                 }
             )
-        log.debug('list of tags: ' + str(jsonify(news_list)))
+        log.debug("list of tags: " + str(jsonify(news_list)))
         return jsonify(news_list), 200
 
     elif request.method == "POST":
@@ -68,7 +63,9 @@ def handle_news():
         data = request.get_json()
 
         # Валидация входных данных
-        if not data or not all(k in data for k in ("title", "body", "source_type", "tags")):
+        if not data or not all(
+            k in data for k in ("title", "body", "source_type", "tags")
+        ):
             return jsonify({"error": "Invalid input data", "details": data}), 400
 
         # Создание новой записи News
@@ -95,4 +92,9 @@ def handle_news():
             return jsonify({"error": "General exception", "details": e}), 500
         else:
             log.debug(news_item)
-            return jsonify({"message": "News item created successfully", "id": news_item.id}), 201
+            return (
+                jsonify(
+                    {"message": "News item created successfully", "id": news_item.id}
+                ),
+                201,
+            )
