@@ -14,14 +14,6 @@ class Club(db.Model):
     """Name of the club"""
     description = Column(Text, nullable=True)
     """Description of the club"""
-    news = relationship(
-        "News",
-        primaryjoin="and_(foreign(News.source_id) == Club.id, News.source_type == 'Club')",
-        backref="club",
-    )
-    """
-    For sorting news from this club
-    """
 
     def __init__(self, name: str):
         """

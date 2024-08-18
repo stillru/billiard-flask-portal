@@ -1,0 +1,67 @@
+{% extends "layouts/base.html" %}
+<!-- based on https://flask-gradient-able.appseed-srv1.com/ -->
+{% block title %}Add News{% endblock %}
+{% block header_css %}
+{% endblock %}
+{% block header_js %}
+{% endblock %}}
+{% block content %}
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <!-- [ Main Content ] start -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-round">
+                    <div class="card-header">
+                        <div class="card-head-row card-tools-still-right">
+                            <h4 class="card-title">Add News</h4>
+                        </div>
+                        <p class="card-category">Add a new news item</p>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" id="news-form">
+                            {{ form.hidden_tag() }}
+                            <div class="input-group-prepend">
+                                {{ form.title.label(class="col-form-label col-sm-3") }}
+                                {{ form.title(class="form-control") }}
+                            </div>
+                            <div class="input-group-prepend">
+                                {{ form.body.label(class="col-sm-3 col-form-label") }}
+                                    {{ form.body(class="form-control") }}
+                            </div>
+                            <div class="input-group-prepend">
+                                {{ form.source_type.label(class="col-sm-3 col-form-label") }}
+                                    {{ form.source_type(class="form-control") }}
+                            </div>
+                            <div class="input-group-prepend">
+                                {{ form.tags.label(class="col-sm-3 col-form-label") }}
+                                    {{ form.tags(class="form-control", multiple=True) }}
+                            </div>
+                            <div class="input-group-prepend">
+                                {{ form.submit(class="btn btn-primary btn-block mt-2 mb-4") }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="newsToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Уведомление</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Новость успешно добавлена!
+        </div>
+    </div>
+</div>
+<!-- End Toast -->
+{% endblock %}
+{% block javascripts %}
+<script src="{{ url_for('static', filename='assets/js/pages/news-add.js') }}"></script>
+{% endblock javascripts %}

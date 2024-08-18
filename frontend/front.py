@@ -1,7 +1,10 @@
 import logging
 from flask import Flask, current_app
-
+from flask_cors import CORS
+from flask_wtf import CSRFProtect
 from config import Config, TestConfig
+
+from routes.news_admin import news_bp
 from routes.auth import auth_bp
 from routes.common import common_bp
 
@@ -12,10 +15,13 @@ def create_app(config_class=Config):
 
     # Настройка logging
     logger = logging.getLogger(__name__)
+    csrf = CSRFProtect(app)
+    CORS(app)
 
     # Регистрация Blueprint
     app.register_blueprint(auth_bp)
     app.register_blueprint(common_bp)
+    app.register_blueprint(news_bp)
 
     with app.app_context():
         Config.configure_logging()

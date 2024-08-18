@@ -18,6 +18,5 @@ class News(db.Model):
     title = db.Column(db.String(255), nullable=False)
     body = db.Column(db.Text, nullable=False)
     source_type = db.Column(db.String(50), nullable=False)
-    source_id = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     tags = db.relationship("Tag", secondary="news_tags", back_populates="news")

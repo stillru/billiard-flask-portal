@@ -10,6 +10,7 @@ class Config(object):
     LOG_FORMAT = (
         "[FRONTEND - Prod] %(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
+    SECRET_KEY = "just_play"
 
     @classmethod
     def configure_logging(self):
@@ -19,7 +20,15 @@ class Config(object):
             f"Configuration logger done:\t{self.LOG_LEVEL} is set\t Used config - {self.CONFIG_NAME}",
         )
 
+    @classmethod
+    def configure_logging(self):
+        logging.basicConfig(level=self.LOG_LEVEL, format=self.LOG_FORMAT)
+        logging.log(
+            logging.INFO,
+            f"Configuration logger done:\t{self.LOG_LEVEL} is set\t Used config - {self.CONFIG_NAME}",
+        )
 
+        
 class TestConfig(Config):
     CONFIG_NAME = "Testing"
     TESTING = True

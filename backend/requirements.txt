@@ -11,3 +11,4 @@ pytest-flask
 sphinx
 sphinx_rtd_theme
 flask-security
+git+https://github.com/drewdru/flask-quill.git

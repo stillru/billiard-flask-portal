@@ -16,7 +16,7 @@ class Config(object):
     SECRET_KEY = "just_play"
     token = "eyJhbGciOiAiRWREU0EiLCAidHlwIjogIkpXVCJ9.eyJleHAiOiAxNzU0Mzc0OTUyfQ.cuRAe9wOE_AuJphvR_dN_M_eesJ3KEt_dEDvVBB_mXdWfwZPp6X6fJXNP1gkixCiDt2mWmap1imaS_y69oIkCw"
     SQLALCHEMY_DATABASE_URI = (
-        f"sqlite+libsql://localhost:5002/?authToken={token}&secure=false"
+        f"sqlite:///production.db"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

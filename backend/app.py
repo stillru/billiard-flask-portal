@@ -42,6 +42,7 @@ if __name__ == "__main__":
     app = create_app(ProductionConfig)
     ProductionConfig.configure_logging()
     with app.app_context():
+        upgrade(directory="migrations")
         for rule in app.url_map.iter_rules():
             logging.log(20, f"Endpoint: {rule.endpoint}, URL: {rule.rule}")
     app.run(debug=True, port=5000)

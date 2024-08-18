@@ -1,0 +1,48 @@
+
+	<!-- [ navigation menu ] start -->
+	<nav class="pcoded-navbar menupos-fixed menu-light ">
+		<div
+			class="navbar-wrapper  ">
+			<div class="navbar-content scroll-div ">
+				<ul class="nav pcoded-inner-navbar ">
+					{% for category, routes in routes|groupby('category') %}
+                    	{% if category == "Utils" %}
+                    	{% else %}
+                    	<li class="nav-item pcoded-menu-caption">
+							<label>{{ category }}</label>
+                    	</li>
+                    	{% for route in routes %}
+                        	{% if route.requires_auth and not session.logged_in %}
+                            <!-- Skip admin routes if user is not logged in -->
+                        	{% else %}
+                            <li class="nav-item">
+                                <a href="{{ route.url }}"><span class="pcoded-micon">
+									<i class="fas fa-link"></i></span><span class="pcoded-mtext">{{ route.name }}</span>
+                                </a>
+                            </li>
+                        	{% endif %}
+						{% endfor %}
+						{% endif %}
+                    {% endfor %}
+					<li class="nav-item pcoded-hasmenu">
+						<a href="#" class="nav-link "><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span
+								class="pcoded-mtext">Menu levels</span></a>
+						<ul class="pcoded-submenu">
+							<li><a href="#">Menu Level 2.1</a></li>
+							<li class="pcoded-hasmenu">
+								<a href="#">Menu level 2.2</a>
+								<ul class="pcoded-submenu">
+									<li><a href="#">Menu level 3.1</a></li>
+									<li><a href="#">Menu level 3.2</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li class="nav-item"><a href="/sample-page.html" class="nav-link "><span class="pcoded-micon"><i
+									class="feather icon-sidebar"></i></span><span class="pcoded-mtext">Sample page</span></a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- [ navigation menu ] end -->
+    

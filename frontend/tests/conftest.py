@@ -38,7 +38,7 @@ def driver(driver_type="Chrome"):
         # initialize Chrome driver
         driver = webdriver.Chrome(options=options)
     yield driver
-    time.sleep(30)
+    time.sleep(5)
     driver.quit()
 
 
