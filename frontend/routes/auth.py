@@ -21,4 +21,4 @@ def login():
 @route_metadata(name="Error", category="Utils")
 def error():
     error_message = request.args.get("message", "An unknown error occurred.")
-    return render_template("error.html", error_message=error_message)
+    return render_template("home/page-500.html", error_message=error_message)

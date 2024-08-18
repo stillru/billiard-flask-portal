@@ -1,0 +1,55 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Add News{% endblock %}
+{% block header_css %}
+{% endblock %}
+{% block header_js %}
+{% endblock %}}
+{% block content %}
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <!-- [ Main Content ] start -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-round">
+                    <div class="card-header">
+                        <div class="card-head-row card-tools-still-right">
+                            <h4 class="card-title">Add News</h4>
+                        </div>
+                        <p class="card-category">Add a new news item</p>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" id="news-form">
+                            {{ form.hidden_tag() }}
+                            <div class="form-group form-group-default">
+                                {{ form.title.label(class="form-control-label") }}
+                                {{ form.title(class="form-control") }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                <label for="body">Body</label>
+                                <div id="editor" class="form-control" style="height: 300px;"></div>
+                                <input type="hidden" name="body" id="body">
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{ form.source_type.label(class="form-control-label") }}
+                                {{ form.source_type(class="form-control") }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{ form.tags.label(class="form-control-label") }}
+                                {{ form.tags(class="form-control", multiple=True) }}
+                            </div>
+                            <div class="form-group form-group-default btn btn-primary btn-block mt-2 mb-4">
+                                {{ form.submit(class="btn btn-black btn-border") }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="{{ url_for('static', filename='assests/js/add_news.js') }}"></script>
+{% endblock %}

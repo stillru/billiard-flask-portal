@@ -10,6 +10,8 @@ class Config(object):
     LOG_FORMAT = (
         "[FRONTEND - Prod] %(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
+    SECRET_KEY = "just_play"
+
 
     @classmethod
     def configure_logging(self):
