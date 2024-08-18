@@ -76,7 +76,6 @@ def handle_news():
             title=data["title"],
             body=str(data["body"]),
             source_type=data["source_type"],
-            delta=str(data["delta"])
         )
 
         if "tags" in data:
