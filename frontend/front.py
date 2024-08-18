@@ -2,9 +2,9 @@ import logging
 from flask import Flask, current_app
 from flask_cors import CORS
 from flask_wtf import CSRFProtect
+from config import Config, TestConfig
 
 from routes.news_admin import news_bp
-from config import Config, TestConfig
 from routes.auth import auth_bp
 from routes.common import common_bp
 
