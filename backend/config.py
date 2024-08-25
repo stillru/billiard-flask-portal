@@ -14,9 +14,14 @@ class Config(object):
     LOG_LEVEL = logging.DEBUG
     LOG_FORMAT = "[BACKEND] %(asctime)s - %(name)s - %(levelname)s - %(message)s"
     SECRET_KEY = "just_play"
-    token = "eyJhbGciOiAiRWREU0EiLCAidHlwIjogIkpXVCJ9.eyJleHAiOiAxNzU0Mzc0OTUyfQ.cuRAe9wOE_AuJphvR_dN_M_eesJ3KEt_dEDvVBB_mXdWfwZPp6X6fJXNP1gkixCiDt2mWmap1imaS_y69oIkCw"
     SQLALCHEMY_DATABASE_URI = f"sqlite:///production.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    API_TITLE = "Billjard backend API"
+    API_VERSION = "v1"
+    OPENAPI_VERSION = "3.0.2"
+    OPENAPI_URL_PREFIX = "/"
+    OPENAPI_SWAGGER_UI_PATH = "/swagger-ui"
+    OPENAPI_SWAGGER_UI_URL = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
 
     @classmethod
     def configure_logging(cls):
@@ -32,7 +37,8 @@ class TestConfig(Config):
     LOGGER_NAME = "test_logger"
     TESTING = True
     LOG_LEVEL = logging.DEBUG
-    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///testing.db"
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
     LOG_FORMAT = "[BACKEND - Test] %(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 

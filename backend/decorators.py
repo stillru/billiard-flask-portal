@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request, jsonify, make_response, Response
+from flask import jsonify, make_response, Response
 from werkzeug.wrappers import Response as WerkzeugResponse
 
 
@@ -36,7 +36,7 @@ def format_response(func):
             "state": status_message,
             "data": data,
         }
-        print(jsonify(formatted_response), status_code)
+
         return make_response(jsonify(formatted_response), status_code)
 
     return decorated_function

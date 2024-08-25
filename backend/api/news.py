@@ -1,100 +1,88 @@
-import json
 import logging
 
-from flask import request, jsonify, Blueprint
+from flask import current_app as app, request
+from flask.views import MethodView
+from flask_smorest import Blueprint, abort
+from marshmallow import ValidationError
+from sqlalchemy.exc import IntegrityError
 
-from backend.extensions import db
-from backend.models import Club, Game, Tournament, News, Tag
 from backend.decorators import format_response
+from backend.extensions import db
+from backend.models.news import News, Tag
+from backend.schemas import TagSchema, NewsSchema
 
 log = logging.getLogger()
-news_bp = Blueprint("api", __name__)
+news_bp = Blueprint("news", __name__, description="Operation on news")
+tags_bp = Blueprint("tags", __name__, description="Operations on tags")
 
 
-@news_bp.route("/tags", methods=["GET", "POST"])
-@format_response
-def handle_tags():
-    if request.method == "GET":
+@tags_bp.route("/tags")
+class Tags(MethodView):
+    @tags_bp.response(200, TagSchema(many=True))
+    @format_response
+    def get(self):
+        """List tags"""
         tags = Tag.query.all()
-        tags_list = []
-        for tag in tags:
-            tags_list.append({"id": tag.id, "name": tag.name})
-        log.debug(f"list of tags: {jsonify(tags_list)}")
-        return jsonify(tags_list), 200
-    if request.method == "POST":
-        data = request.get_json()
-        log.info(data)
-        if "name" not in data:
-            return jsonify({"errors": {"name": "This field is required."}}), 400
-        exist_tags = Tag.query.filter_by(name=data["name"]).first()
-        if exist_tags:
-            return jsonify({"errors": "This tag already in system"}), 400
-        else:
-            new_tag = Tag(name=data["name"])
+        tag_schema = TagSchema(many=True)
+        data = tag_schema.dump(tags)
+        return data
+
+    @tags_bp.response(201, TagSchema)
+    @format_response
+    def post(self):
+        """Create a new tag"""
+        json_data = request.get_json()
+        tag_schema = TagSchema()
+        try:
+            new_tag = Tag(**json_data)
             db.session.add(new_tag)
             db.session.commit()
-            return jsonify({"message": "New tag add", "id": new_tag.id}), 201
+        except ValidationError as err:
+            abort(400, message=str(err))
+        except IntegrityError as e:
+            db.session.rollback()
+            abort(400, message=str(e.orig))
+        except Exception as e:
+            db.session.rollback()
+            log.error(f"Error in POST /tags: {e}")
+            abort(500, message=str(e))
+        return tag_schema.dump(new_tag), 201
 
 
-@news_bp.route("/news", methods=["GET", "POST"])
-@format_response
-def handle_news():
-    if request.method == "GET":
-        # Обработка GET-запроса - получение всех новостей
-        news_items = News.query.all()
-        news_list = []
-        for item in news_items:
-            news_list.append(
-                {
-                    "id": item.id,
-                    "title": item.title,
-                    "body": item.body,
-                    "source_type": item.source_type,
-                    "source_name": "Unknown",
-                    "tags": [tag.name for tag in item.tags],
-                    "created_at": item.created_at.isoformat(),  # Форматируем дату в ISO 8601
-                }
-            )
-        log.debug("list of tags: " + str(jsonify(news_list)))
-        return jsonify(news_list), 200
+@news_bp.route("/news")
+class Newses(MethodView):
+    @news_bp.response(200, NewsSchema(many=True))
+    @format_response
+    def get(self):
+        """List news"""
+        newses = News.query.all()
+        news_schema = NewsSchema(many=True)
+        data = news_schema.dump(newses)
+        return data
 
-    elif request.method == "POST":
-        # Обработка POST-запроса - добавление новой новости
-        data = request.get_json()
-
-        # Валидация входных данных
-        if not data or not all(
-            k in data for k in ("title", "body", "source_type", "tags")
-        ):
-            return jsonify({"error": "Invalid input data", "details": data}), 400
-
-        # Создание новой записи News
-        news_item = News(
-            title=data["title"],
-            body=str(data["body"]),
-            source_type=data["source_type"],
-        )
-
-        if "tags" in data:
-            log.debug(data["tags"])
-            for tag in data["tags"]:
-                cur_tag = Tag.query.filter_by(id=tag).all()
-                news_item.tags.extend(cur_tag)
-
-        # Сохранение в БД
+    @news_bp.response(201, NewsSchema)
+    @format_response
+    def post(self):
+        """Create a new news item"""
+        json_data = request.get_json()
+        news_schema = NewsSchema()
         try:
-            log.debug("Trying to add news to db...")
+            news_data = news_schema.load(json_data)
+            news_item = News(
+                title=news_data["title"],
+                body=news_data["body"],
+                source_type=news_data["source_type"],
+            )
             db.session.add(news_item)
             db.session.commit()
-        except AttributeError as e:
-            return jsonify({"error": "Attribute error", "details": e}), 500
+        except ValidationError as err:
+            log.info(f"Validation error occurred: {err} on data {json_data}")
+            return {"message": str(err)}, 400
+        except IntegrityError as e:
+            db.session.rollback()
+            return {"message": str(e.orig)}, 400
         except Exception as e:
-            return jsonify({"error": "General exception", "details": e}), 500
-        else:
-            log.debug(news_item)
-            return (
-                jsonify(
-                    {"message": "News item created successfully", "id": news_item.id}
-                ),
-                201,
-            )
+            db.session.rollback()
+            return {"message": str(e)}, 500
+
+        return news_schema.dump(news_item), 201
