@@ -14,11 +14,14 @@ class Event(db.Model):
     __tablename__ = "events"
     id = db.Column(db.Integer, primary_key=True)
     game_id = db.Column(db.Integer, db.ForeignKey("games.id"))
+    match_id = db.Column(db.Integer, db.ForeignKey("matches.id"))
     player_id = db.Column(db.Integer, db.ForeignKey("players.id"))
     event_type = db.Column(db.Enum(EventType))
     ball_number = db.Column(db.Integer, nullable=True)
-    is_foul = db.Column(db.Boolean, default=False)
+    success = db.Column(db.Boolean, default=False)
+    timestamp = db.Column(db.DateTime, server_default=db.func.now())
     game = db.relationship("Game")
+    match = db.relationship("Match")
     player = db.relationship("Player")
     description = db.Column(db.String)
 

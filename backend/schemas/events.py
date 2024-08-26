@@ -3,7 +3,7 @@ import marshmallow as ma
 from marshmallow import post_load, ValidationError
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, auto_field
 
-from backend.models.events import GlobalEvent
+from backend.models.events import GlobalEvent, Event
 from backend.models.user import User
 
 
@@ -48,3 +48,8 @@ class GlobalEventSchema(SQLAlchemyAutoSchema):
             logging.debug(data)
 
         return data
+
+class EventSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Event
+        load_instance = True

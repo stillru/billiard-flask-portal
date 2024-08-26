@@ -31,17 +31,31 @@ class HandleGame(MethodView):
         except IntegrityError as e:
             db.session.rollback()
             abort(500, message=f"IntegrityError: {str(e.orig)}")
-        all_match = Match.query.all()
-        games_schema = MatchSchema(session=db.session, many=True)
-        log.debug(f"All games: {games_schema.dump(all_match)}")
         return game_schema.dump(new_game), 201
 
 
+
+@game_bp.route("/game/all")
+class HandleAllGame(MethodView):
+    @format_response
+    def get(self):
+        log.info(f"GET /game/all")
+        matches_schema = MatchSchema(session=db.session, many=True)
+        all_matches = Match.query.all()
+        log.debug(f"All matches: {matches_schema.dump(all_matches)}")
+        return matches_schema.dump(all_matches), 200
+
 @game_bp.route("/game/<int:game_id>/match")
 class HandleAllMatch(MethodView):
+
     @format_response
     def post(self):
+        # Implementation for the POST method should go here
         pass
 
-    def get(self):
-        pass
+    def get(self, game_id):
+        log.info(f"GET /game/{game_id}/match")
+        matches_schema = MatchSchema(session=db.session, many=True)
+        all_matches = Match.query.filter(Match.id == game_id).all()
+        log.debug(f"All matches in game {game_id}: {matches_schema.dump(all_matches)}")
+        return matches_schema.dump(all_matches), 200
