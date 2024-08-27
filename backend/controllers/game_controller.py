@@ -1,104 +1,79 @@
 import random
 
-from backend.models import Event
+from flask import jsonify
 
+from backend.extensions import db
+from backend.models import Event, Match, Game
+from backend.models.match import MatchStatus
+from backend.schemas.match import MatchSchema
+from backend.utils import log
 
 class MatchService:
-    def __init__(self, match, players, db_session):
-        self.match = match
-        self.players = players
-        self.db_session = db_session
-        self.current_player = None
-        self.balls_selected = False  # Определяет, выбраны ли шары для каждого игрока
-        self.player_balls = {
-            player.id: None for player in players
-        }  # Связь игрока с типом шаров (например, четные или нечетные)
+    def start_match(self, game_id):
+        # Logic to check if there's an active match
+        log.info(f"{__name__} - start creating 'match'")
+        match_game = Match.query.filter(Match.game_id == game_id).first()
+        if match_game == None:
+            log.debug(f"No match - {match_game}")
+            game = Game.query.filter(Game.id == game_id).first()
+            self._create_match(game_id, match_id=None, game=game)
+            return 0
+        if self._is_active_match(game_id):
+            raise ValueError("Active match exists for this game.")
 
-    def draw_lots(self):
-        """Проведение жеребьёвки."""
-        random.shuffle(self.players)
-        self.current_player = self.players[0]
-        print(f"Игрок {self.current_player.name} ходит первым.")
 
-    def select_balls(self, ball_pocketed):
-        """Фаза выбора шаров."""
-        if not self.balls_selected:
-            if ball_pocketed % 2 == 0:
-                self.player_balls[self.current_player.id] = "even"
-                self.player_balls[self.players[1].id] = "odd"
-            else:
-                self.player_balls[self.current_player.id] = "odd"
-                self.player_balls[self.players[1].id] = "even"
-            self.balls_selected = True
-            print(
-                f"Игрок {self.current_player.name} забивает {self.player_balls[self.current_player.id]} шары."
-            )
+        # Logic to get matches and create a new one
+        next_match_id = self._get_next_match_id(game_id)
+        self._create_match(game_id, next_match_id)
+        return next_match_id
 
-    def pocket_ball(self, ball_number, pocket_number):
-        """Контроль забития шара в лузу."""
-        if not self.balls_selected:
-            self.select_balls(ball_number)
+    def get_match_status(self, game_id, match_id):
+        # Logic to retrieve the match status
+        match_status = self._retrieve_match_status(game_id, match_id)
+        if match_status is None:
+            raise ValueError("Match not found.")
+        return match_status
 
-        if self.is_correct_ball(ball_number):
-            print(
-                f"Игрок {self.current_player.name} забил правильный шар {ball_number} в лузу {pocket_number}."
-            )
-            self.record_action(ball_number, pocket_number, success=True)
-            if not self.check_victory_condition():
-                return  # Игрок продолжает ход
+    def update_match_status(self, game_id, match_id, data):
+        # Logic to update the match state
+        match_status = self._retrieve_match_status(game_id, match_id)
+        if match_status is None:
+            raise ValueError("Match not found.")
+
+        self._apply_move(match_status, data)
+        result = self._check_match_result(match_status)
+        return result
+
+    def _is_active_match(self, game_id):
+        result = Match.query.filter( Match.status == MatchStatus.IN_PROGRESS, Match.game_id == game_id).first()
+        if result is None:
+            return False
         else:
-            print(
-                f"Игрок {self.current_player.name} промахнулся или забил неправильный шар {ball_number}."
-            )
-            self.record_action(ball_number, pocket_number, success=False)
-            self.switch_player()
-
-    def is_correct_ball(self, ball_number):
-        """Проверка, правильный ли шар был забит."""
-        player_ball_type = self.player_balls[self.current_player.id]
-        if player_ball_type == "even" and ball_number % 2 == 0:
             return True
-        elif player_ball_type == "odd" and ball_number % 2 != 0:
-            return True
-        return False
+        pass
 
-    def switch_player(self):
-        """Переключение на следующего игрока."""
-        self.current_player = (
-            self.players[1]
-            if self.current_player == self.players[0]
-            else self.players[0]
+    def _get_next_match_id(self, game_id):
+        # Implement the logic to get the next match ID
+        pass
+
+    def _create_match(self, game_id, match_id, game):
+        match_schema = MatchSchema()
+        new_match = Match(
+            game_id=game_id,
+            player1=game.player1,
+            player2=game.player2
         )
-        print(f"Теперь ходит игрок {self.current_player.name}.")
+        db.session.add(new_match)
+        db.session.commit()
 
-    def record_action(self, ball_number, pocket_number, success):
-        """Запись каждого хода в базу данных."""
-        action_data = {
-            "match_id": self.match.current_match.id,
-            "player_id": self.current_player.id,
-            "event_type": "pocket_ball",
-            "details": f"Ball {ball_number} pocketed in pocket {pocket_number}, Success: {success}",
-        }
-        action = Event(**action_data)
-        self.db_session.add(action)
-        self.db_session.commit()
-        print(f"Записано действие: {action.details}")
+    def _retrieve_match_status(self, game_id, match_id):
+        # Implement the logic to retrieve match status
+        pass
 
-    def check_victory_condition(self):
-        """Проверка условия победы (например, все шары одного типа забиты)."""
-        # Пример простого условия победы
-        player_ball_type = self.player_balls[self.current_player.id]
-        if all(
-            self.is_correct_ball(ball_number) for ball_number in self.remaining_balls()
-        ):
-            print(f"Игрок {self.current_player.name} выиграл!")
-            self.match.status = "completed"
-            self.match.winner_id = self.current_player.id
-            self.db_session.commit()
-            return True
-        return False
+    def _apply_move(self, match_status, data):
+        # Implement the logic to apply a move to the match
+        pass
 
-    def remaining_balls(self):
-        """Возвращает список оставшихся шаров."""
-        # Заглушка: нужно получить реальные данные из базы данных или другого источника
-        return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  # Примерный список шаров
+    def _check_match_result(self, match_status):
+        # Implement the logic to check the result of the match
+        pass

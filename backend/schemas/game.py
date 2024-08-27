@@ -11,10 +11,12 @@ class GameSchema(SQLAlchemySchema):
         load_instance = True
 
     id = auto_field(dump_only=True)
-    matches = auto_field(required=True)
-    club_id = auto_field(required=True)
-    player1_score = auto_field(required=True)
-    player2_score = auto_field(required=True)
+    matches = auto_field(required=False)
+    club_id = auto_field(required=False) # will be changed when implement clubs
+    player1_id = auto_field(required=False)
+    player2_id = auto_field(required=False)
+    player1_score = auto_field(required=False)
+    player2_score = auto_field(required=False)
     winner_id = auto_field(required=False, allow_none=True)  # Allow None for winner_id
 
     @validates("player1_score")

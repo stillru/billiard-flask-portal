@@ -10,8 +10,8 @@ class MatchSchema(SQLAlchemySchema):
         load_instance = True
 
     id = auto_field(dump_only=True)
-    player1_id = auto_field(required=True)
-    player2_id = auto_field(required=True)
+    player1_id = auto_field(required=False)
+    player2_id = auto_field(required=False)
     winner_id = auto_field(required=False, allow_none=True)  # Allow None for winner_id
 
     @validates("player1_id")

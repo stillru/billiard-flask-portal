@@ -42,17 +42,24 @@ class Events(MethodView):
             abort(400, message=f"{event_type} not valid")
 
         event_service = EventService(json_data, current_app.test_client())
-
+        response_data = {}
         if event_type == "start_game":
-            response_data = event_service.handle_start_game()
+            response = event_service.handle_start_game()
+            response_data['data'] = response
+            response_data['event_type'] = response['event_type']
         elif event_type == "start_play":
             response = event_service.handle_start_play()
+            response_data['data'] = response
+            response_data['event_type'] = response['event_type']
         elif event_type == "end_party":
             response = event_service.handle_end_party()
+            response_data['data'] = response
+            response_data['event_type'] = response['event_type']
         else:
             abort(400, message="Unsupported event type")
 
         if isinstance(response_data, dict):
+            logging.debug(response_data)
             try:
                 event_new = event_schema.load(response_data)
                 db.session.add(event_new)
@@ -66,4 +73,4 @@ class Events(MethodView):
                 db.session.rollback()
                 abort(500, message=str(e))
         else:
-            abort(400, message=response.get_json())
+            abort(400, message=response_data.get_json())

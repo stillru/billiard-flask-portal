@@ -57,7 +57,7 @@ def create_app(config_class=ProductionConfig):
 
         # Apply migrations
         if config_class.TESTING:
-            upgrade(directory="backend/migrations")
+            upgrade(directory="migrations")
         else:
             upgrade(directory="backend/migrations")
         log.info("Database migrations applied.")

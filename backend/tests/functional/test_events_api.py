@@ -30,8 +30,6 @@ def test_event_create_game(client):
             "player2_id": data_player2["data"]["id"],
         },
     )
-    json_data = response.get_json()
-    log.info(json_data)
     assert response.status_code == 201
 
 

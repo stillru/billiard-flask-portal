@@ -17,14 +17,18 @@ class Game(db.Model):
         db.Integer, db.ForeignKey("tournaments.id"), nullable=True
     )
     round_number = db.Column(db.Integer, nullable=True)
-    player1_score = db.Column(db.Integer)
-    player2_score = db.Column(db.Integer)
+    player1_id = db.Column(db.Integer, db.ForeignKey("players.id"))
+    player1_score = db.Column(db.Integer, default=0, nullable=True)
+    player2_id = db.Column(db.Integer, db.ForeignKey("players.id"))
+    player2_score = db.Column(db.Integer, default=0, nullable=True)
     winner_id = db.Column(db.Integer, db.ForeignKey("players.id"), nullable=True)
     status = db.Column(db.Enum(GameStatus), default=GameStatus.IN_PROGRESS)
 
     # Связи
     club = db.relationship("Club", back_populates="games")
-    winner = db.relationship("Player")
+    winner = db.relationship("Player",foreign_keys=[winner_id])
+    player1 = db.relationship("Player",foreign_keys=[player1_id])
+    player2 = db.relationship("Player",foreign_keys=[player2_id])
     season = db.relationship("Season", back_populates="games")
     tournament = db.relationship("Tournament", back_populates="games")
     matches = db.relationship(

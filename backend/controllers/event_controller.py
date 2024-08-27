@@ -1,3 +1,5 @@
+import logging
+
 from flask import jsonify
 
 
@@ -8,20 +10,20 @@ class EventService:
 
     def handle_start_game(self):
         response = self.client.post(
-            "/api/match",
+            "/api/game",
             json={
                 "player1_id": self.json_data.get("player1_id"),
                 "player2_id": self.json_data.get("player2_id"),
             },
         )
         resp = response.get_json()
+        logging.debug(resp)
         resp["event_type"] = "start_game"
         return resp
 
     def handle_start_play(self):
         response = self.client.post(
-            f"/api/match/{self.json_data.get('game_id')}/match",
-            json={"type_id": self.json_data.get("game_id")},
+            f"/api/game/{self.json_data.get('game_id')}/match",
         )
         resp = response.get_json()
         resp["event_type"] = "start_play"
