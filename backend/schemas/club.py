@@ -9,10 +9,12 @@ class PhotoSchema(SQLAlchemyAutoSchema):
         model = Photo
         load_instance = True
 
+
 class ClubSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Club
         load_instance = True
+
     id = fields.Integer(load_only=True)
 
     photos = fields.List(fields.Nested(PhotoSchema))

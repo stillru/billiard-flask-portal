@@ -34,6 +34,7 @@ def test_event_create_game(client):
     log.info(json_data)
     assert response.status_code == 201
 
+
 def test_add_second_game(client):
     response = client.post(
         "/api/event",
@@ -47,10 +48,9 @@ def test_add_second_game(client):
     log.info(json_data)
     assert response.status_code == 201
 
+
 def test_show_events(client):
-    list = client.get(
-        "/api/event"
-    )
+    list = client.get("/api/event")
     json_data = list.get_json()
     log.info(json_data)
     assert list.status_code == 200

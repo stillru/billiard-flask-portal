@@ -26,7 +26,7 @@ def format_response(func):
             403: "Forbidden",
             404: "Not Found",
             500: "Internal Server Error",
-            700: "Wrong game in query",
+            700: "Wrong match in query",
         }
 
         status_message = status_messages.get(status_code, "Unknown Status")

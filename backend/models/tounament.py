@@ -49,7 +49,6 @@ class Tournament(db.Model):
     season_id = db.Column(db.Integer, db.ForeignKey("season.id"), nullable=True)
     season = db.relationship("Season", back_populates="tournaments")
     participants = db.relationship("TournamentParticipant", back_populates="tournament")
-    matches = db.relationship("Match", back_populates="tournament")
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(
         db.DateTime, server_default=db.func.now(), onupdate=db.func.now()

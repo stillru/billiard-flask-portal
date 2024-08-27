@@ -28,4 +28,6 @@ class MatchSchema(SQLAlchemySchema):
     def validate_winner_id(self, value, **kwargs):
         if value is not None:  # Allow None as it represents an undefined winner.
             if value not in [self.context["player1_id"], self.context["player2_id"]]:
-                raise ValidationError("winner_id must be either player1_id or player2_id.")
+                raise ValidationError(
+                    "winner_id must be either player1_id or player2_id."
+                )

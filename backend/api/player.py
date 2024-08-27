@@ -32,7 +32,11 @@ class Register(MethodView):
             abort(400, message=f"Validation error: {e.messages}")
         except Exception as e:
             abort(400, e)
-        user = User(name=json_data["name"], password=json_data["password"], email=json_data["email"])
+        user = User(
+            name=json_data["name"],
+            password=json_data["password"],
+            email=json_data["email"],
+        )
         db.session.add(user)
         db.session.commit()
         if "new_player" in json_data:

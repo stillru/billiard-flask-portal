@@ -19,35 +19,41 @@ class GlobalEventSchema(SQLAlchemyAutoSchema):
 
     @post_load
     def combine_fields(self, data, **kwargs):
-        event_type = data.get('event_type')
+        event_type = data.get("event_type")
 
         # Validate event_type
         if event_type not in [
-            "start_game", "player_scored", "end_game",
-            "start_play", "update_play", "end_play",
-            "register_user", "register_player"
+            "start_game",
+            "player_scored",
+            "end_game",
+            "start_play",
+            "update_play",
+            "end_play",
+            "register_user",
+            "register_player",
         ]:
-            raise ValidationError(
-                f"'{event_type}' is not a valid event type."
-            )
+            raise ValidationError(f"'{event_type}' is not a valid event type.")
 
-        event_data = data.get('data', {})
+        event_data = data.get("data", {})
 
         # Process specific event types
         if event_type == "start_game":
-            player1_id = event_data.get('player1_id')
-            player2_id = event_data.get('player2_id')
+            player1_id = event_data.get("player1_id")
+            player2_id = event_data.get("player2_id")
             player1 = User.query.filter_by(id=player1_id).first()
             player2 = User.query.filter_by(id=player2_id).first()
             if not player1 or not player2:
                 raise ValidationError("Player IDs must be valid and existing users.")
-            data['description'] = f'{player1.name} and {player2.name} are starting a game...'
+            data["description"] = (
+                f"{player1.name} and {player2.name} are starting a game..."
+            )
 
         # Add additional processing for other event types as needed
         elif event_type in ["start_play", "register_player"]:
             logging.debug(data)
 
         return data
+
 
 class EventSchema(SQLAlchemyAutoSchema):
     class Meta:

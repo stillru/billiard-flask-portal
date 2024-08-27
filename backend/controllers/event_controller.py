@@ -8,7 +8,7 @@ class EventService:
 
     def handle_start_game(self):
         response = self.client.post(
-            "/api/game",
+            "/api/match",
             json={
                 "player1_id": self.json_data.get("player1_id"),
                 "player2_id": self.json_data.get("player2_id"),
@@ -20,7 +20,7 @@ class EventService:
 
     def handle_start_play(self):
         response = self.client.post(
-            f"/api/game/{self.json_data.get('game_id')}/match",
+            f"/api/match/{self.json_data.get('game_id')}/match",
             json={"type_id": self.json_data.get("game_id")},
         )
         resp = response.get_json()
@@ -29,7 +29,7 @@ class EventService:
 
     def handle_player_scored(self):
         response = self.client.post(
-            f"/api/game/{self.json_data.get('game_id')}/match/{self.json_data.get('play_id')}",
+            f"/api/match/{self.json_data.get('game_id')}/match/{self.json_data.get('play_id')}",
             json={
                 "player_id": self.json_data.get("player_id"),
                 "event_type": self.json_data.get("event_eventtype"),
