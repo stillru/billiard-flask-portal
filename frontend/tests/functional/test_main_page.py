@@ -26,6 +26,7 @@ def test_add_news_page_selenium(frontend, backend, driver):
     title = driver.title
     assert "Billijard League - Add News" in title
 
+
 def test_add_news_action_page_selenium(frontend, backend, driver):
     driver.get("http://localhost:5001/add_news")
     WebDriverWait(driver, 10).until(

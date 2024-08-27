@@ -4,7 +4,8 @@ from backend.utils import log
 from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from backend.extensions import db
-from backend.models import Season, Game
+from backend.models.season import Season
+from backend.models.game import Game
 
 
 def get_current_season_dates():

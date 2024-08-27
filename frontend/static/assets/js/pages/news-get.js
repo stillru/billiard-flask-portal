@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         tagElement.className = 'tag';
                         tagElement.textContent = tag;
                         tags.appendChild(tagElement);
+                        console.log(tag);
                     });
 
                     cardHeader.appendChild(cardHeaderText);

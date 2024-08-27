@@ -31,12 +31,13 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
 
         const formData = new FormData(form);
+        const selectedTags = Array.from(tagsSelect.selectedOptions).map(option => option.value);
+
         const data = {
             title: formData.get('title'),
             body: formData.get('body'),
             source_type: formData.get('source_type'),
-            source_id: formData.get('source_id'),
-            tags: Array.from(formData.getAll('tags'))
+            tags: selectedTags
         };
 
         fetch('http://localhost:5000/api/news', {
@@ -48,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(result => {
-            console.log(result.status);
+            console.log(result.data);
             saveToastMessage('Новость успешно добавлена!');
             window.location.href = '/'; // Перенаправление на главную страницу
             })

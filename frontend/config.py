@@ -28,7 +28,7 @@ class Config(object):
             f"Configuration logger done:\t{self.LOG_LEVEL} is set\t Used config - {self.CONFIG_NAME}",
         )
 
-        
+
 class TestConfig(Config):
     CONFIG_NAME = "Testing"
     TESTING = True

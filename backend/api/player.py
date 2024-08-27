@@ -1,46 +1,56 @@
-from flask import request, jsonify, Blueprint
+import logging
 
-from backend.models.player import Player, User
+from flask import request, jsonify
+from flask.views import MethodView
+from flask_smorest import Blueprint, abort
+from marshmallow import ValidationError
+
+from backend.models.player import Player
 from backend.extensions import db
 
 from backend.decorators import format_response
+from backend.models.user import User
+from backend.schemas import PlayerSchema
+from backend.schemas.user import UserSchema
 
 player_bp = Blueprint("api", __name__)
 
 
-@player_bp.route("/register", methods=["POST"])
-@format_response
-def register():
-    data = request.json
-    if (
-        not data
-        or not "new_player" in data
-        or not data
-        or not "name" in data
-        or not "email" in data
-        or not "password" in data
-    ):
-        return jsonify({"error": "Invalid input"}), 400
-
-    existing_user = User.query.filter_by(email=data["email"]).first()
-    if existing_user:
-        return jsonify({"error": "Player already exists"}), 400
-
-    user = User(name=data["name"], password=data["password"], email=data["email"])
-    db.session.add(user)
-    db.session.commit()
-    if "new_player" in data:
-        player = Player(user_id=user.id, score=0, played_games=0)
-        db.session.add(player)
-        db.session.commit()
-        return (
-            jsonify(
-                {
-                    "message": "Registration successful",
-                    "id": user.id,
-                    "new_player": "Created",
-                }
-            ),
-            201,
+@player_bp.route("/register")
+class Register(MethodView):
+    @format_response
+    def post(self):
+        json_data = request.json
+        existing_user = User.query.filter_by(email=json_data["email"]).first()
+        if existing_user:
+            abort(400, message="Player already exists")
+        try:
+            user_schema = UserSchema(session=db.session)
+            data = UserSchema.load(user_schema, data=json_data)
+            logging.info(f"New player validated: {data}")
+        except ValidationError as e:
+            abort(400, message=f"Validation error: {e.messages}")
+        except Exception as e:
+            abort(400, e)
+        user = User(
+            name=json_data["name"],
+            password=json_data["password"],
+            email=json_data["email"],
         )
-    return jsonify({"message": "Registration successful", "id": user.id}), 201
+        db.session.add(user)
+        db.session.commit()
+        if "new_player" in json_data:
+            player = Player(user_id=user.id, score=0, played_games=0, name=user.name)
+            db.session.add(player)
+            db.session.commit()
+            return (
+                jsonify(
+                    {
+                        "message": "Registration successful",
+                        "id": user.id,
+                        "new_player": "Created",
+                    }
+                ),
+                201,
+            )
+        return jsonify({"message": "Registration successful", "id": user.id}), 201

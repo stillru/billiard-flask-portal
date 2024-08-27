@@ -4,3 +4,4 @@
 /.idea
 /database/data/
 **/__pycache__
+/htmlcov/
