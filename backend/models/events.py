@@ -24,7 +24,7 @@ class Event(db.Model):
     description = db.Column(db.Text, nullable=True)
 
     match = db.relationship("Match", back_populates="events")
-    player = db.relationship("Player", backref="event_records")
+    player = db.relationship('Player', back_populates='events', overlaps='event_records')
 
 
 class GlobalEvent(db.Model):
