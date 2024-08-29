@@ -23,7 +23,7 @@ class MatchService:
             return self._create_match(game_id, match_id=None, game=game)
         if self._is_active_match(game_id):
             log.debug(f"Yes match - {match_game}")
-            return self.match_schema.dump(self._is_active_match(game_id))
+            return self.match_schema.dump(self._is_active_match(game_id)), {"warning": "Have active match!"}
 
         # Logic to get matches and create a new one
         next_match_id = self._get_next_match_id(game_id)
@@ -68,7 +68,7 @@ class MatchService:
         return next_id
 
     def _create_match(self, game_id, match_id, game):
-        new_match = Match(game_id=game_id, player1=game.player1, player2=game.player2)
+        new_match = Match(game_id=game_id, player1_id=game.player1_id, player2_id=game.player2_id)
         try:
             log.debug(f"Request data: {new_match}")
             db.session.add(new_match)

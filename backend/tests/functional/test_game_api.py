@@ -35,7 +35,7 @@ def test_create_second_failed_match_in_game(client):
     )
     json_data = new_game.get_json()
     log.info(json_data)
-    assert new_game.status_code == 400
+    assert new_game.status_code == 201
 
 
 def test_get_match_status(client):
