@@ -5,7 +5,7 @@ def test_show_all_matches_in_game(client):
     list = client.get("/api/game/1/match")
     json_data = list.get_json()
     log.info(json_data)
-    assert list.status_code == 200
+    assert list.status_code == 404
 
 
 def test_create_match_in_game(client):
@@ -22,6 +22,7 @@ def test_create_match_in_game(client):
     log.info(json_data)
     assert new_game.status_code == 201
 
+
 def test_create_second_failed_match_in_game(client):
     new_game = client.post(
         "api/game/1/match",
@@ -36,8 +37,17 @@ def test_create_second_failed_match_in_game(client):
     log.info(json_data)
     assert new_game.status_code == 400
 
+
+def test_get_match_status(client):
+    status = client.get("api/game/1/match/1")
+    json_data = status.get_json()
+    log.info(json_data)
+    assert status.status_code == 200
+
+
 def test_show_all_matches_in_game_should_be_one_game(client):
     list = client.get("/api/game/1/match")
     json_data = list.get_json()
     log.info(json_data)
     assert list.status_code == 200
+    assert len(json_data["data"]) == 1

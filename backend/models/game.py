@@ -26,9 +26,9 @@ class Game(db.Model):
 
     # Связи
     club = db.relationship("Club", back_populates="games")
-    winner = db.relationship("Player",foreign_keys=[winner_id])
-    player1 = db.relationship("Player",foreign_keys=[player1_id])
-    player2 = db.relationship("Player",foreign_keys=[player2_id])
+    winner = db.relationship("Player", foreign_keys=[winner_id])
+    player1 = db.relationship("Player", foreign_keys=[player1_id])
+    player2 = db.relationship("Player", foreign_keys=[player2_id])
     season = db.relationship("Season", back_populates="games")
     tournament = db.relationship("Tournament", back_populates="games")
     matches = db.relationship(

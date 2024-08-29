@@ -5,6 +5,7 @@ Revises: 0001
 Create Date: 2024-08-26 11:08:07.178072
 
 """
+
 import logging
 
 from alembic import op
@@ -80,7 +81,9 @@ def upgrade():
             batch_op.create_foreign_key(
                 "fk_tournament_id_games", "tournaments", ["tournament_id"], ["id"]
             )
-            batch_op.create_foreign_key("fk_clubs_id_games", "clubs", ["club_id"], ["id"])
+            batch_op.create_foreign_key(
+                "fk_clubs_id_games", "clubs", ["club_id"], ["id"]
+            )
             batch_op.create_foreign_key(
                 "fk_season_id_games", "season", ["season_id"], ["id"]
             )
@@ -99,7 +102,9 @@ def upgrade():
                 )
             )
             batch_op.drop_constraint("fk_matches_tournament_id", type_="foreignkey")
-            batch_op.create_foreign_key("fk_game_id_matches", "games", ["game_id"], ["id"])
+            batch_op.create_foreign_key(
+                "fk_game_id_matches", "games", ["game_id"], ["id"]
+            )
             batch_op.drop_column("round_number")
             batch_op.drop_column("tournament_id")
     except Exception as e:

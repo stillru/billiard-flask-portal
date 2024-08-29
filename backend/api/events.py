@@ -44,17 +44,11 @@ class Events(MethodView):
         event_service = EventService(json_data, current_app.test_client())
         response_data = {}
         if event_type == "start_game":
-            response = event_service.handle_start_game()
-            response_data['data'] = response
-            response_data['event_type'] = response['event_type']
+            response_data = event_service.handle_start_game()
         elif event_type == "start_play":
-            response = event_service.handle_start_play()
-            response_data['data'] = response
-            response_data['event_type'] = response['event_type']
+            response_data = event_service.handle_start_play()
         elif event_type == "end_party":
-            response = event_service.handle_end_party()
-            response_data['data'] = response
-            response_data['event_type'] = response['event_type']
+            response_data = event_service.handle_end_party()
         else:
             abort(400, message="Unsupported event type")
 

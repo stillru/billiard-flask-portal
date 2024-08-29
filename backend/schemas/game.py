@@ -12,7 +12,7 @@ class GameSchema(SQLAlchemySchema):
 
     id = auto_field(dump_only=True)
     matches = auto_field(required=False)
-    club_id = auto_field(required=False) # will be changed when implement clubs
+    club_id = auto_field(required=False)  # will be changed when implement clubs
     player1_id = auto_field(required=False)
     player2_id = auto_field(required=False)
     player1_score = auto_field(required=False)
