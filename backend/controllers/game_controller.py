@@ -10,37 +10,37 @@ from backend.utils import log
 
 
 class MatchService:
-    match_schema = MatchSchema(session=db.session)
-    matches_schema = MatchSchema(session=db.session, many=True)
+    match_schema = MatchSchema()
+    matches_schema = MatchSchema(many=True)
 
     def start_match(self, game_id):
-        # Logic to check if there's an active match
         log.info(f"{__name__} - start creating 'match'")
         match_game = Match.query.filter(Match.game_id == game_id).first()
-        if match_game == None:
-            log.debug(f"No match - {match_game}")
-            game = Game.query.filter(Game.id == game_id).first()
-            return self._create_match(game_id, match_id=None, game=game)
-        if self._is_active_match(game_id):
-            log.debug(f"Yes match - {match_game}")
-            return self.match_schema.dump(self._is_active_match(game_id)), {"warning": "Have active match!"}
 
-        # Logic to get matches and create a new one
-        next_match_id = self._get_next_match_id(game_id)
-        self._create_match(game_id, next_match_id)
-        return next_match_id
+        if not match_game:
+            log.debug("No active match found.")
+            game = Game.query.filter(Game.id == game_id).first()
+            return self._create_match(game_id, game)
+
+        if self._is_active_match(game_id):
+            log.debug("Active match found.")
+            return self.match_schema.dump(self._is_active_match(game_id)), {
+                "warning": "Active match exists!"
+            }
+
+        next_id = self._get_next_match_id(game_id)
+        self._create_match(game_id, next_id)
+        return next_id
 
     def get_match_status(self, game_id, match_id):
-        # Logic to retrieve the match status
         match_status = self._retrieve_match_status(game_id, match_id)
-        if match_status is None:
+        if not match_status:
             raise ValueError("Match not found.")
         return match_status
 
     def update_match_status(self, game_id, match_id, data):
-        # Logic to update the match state
         match_status = self._retrieve_match_status(game_id, match_id)
-        if match_status is None:
+        if not match_status:
             raise ValueError("Match not found.")
 
         self._apply_move(match_status, data)
@@ -48,32 +48,31 @@ class MatchService:
         return result
 
     def _is_active_match(self, game_id):
-        result = Match.query.filter(
+        return Match.query.filter(
             Match.status == MatchStatus.IN_PROGRESS, Match.game_id == game_id
         ).first()
-        if result is None:
-            return False
-        else:
-            return result
 
     def _get_next_match_id(self, game_id):
-        # Implement the logic to get the next match ID
         latest_match = (
             db.session.query(Match)
             .filter(Match.game_id == game_id)
-            .order_by(Match.match_id.desc())
+            .order_by(Match.id.desc())
             .first()
         )
-        next_id = latest_match.id + 1
-        return next_id
+        return (latest_match.id + 1) if latest_match else 1
 
-    def _create_match(self, game_id, match_id, game):
-        new_match = Match(game_id=game_id, player1_id=game.player1_id, player2_id=game.player2_id)
+    def _create_match(self, game_id, match_id=None, game=None):
+        if game is None:
+            game = Game.query.filter(Game.id == game_id).first()
+        new_match = Match(
+            game_id=game_id, player1_id=game.player1_id, player2_id=game.player2_id
+        )
+
         try:
-            log.debug(f"Request data: {new_match}")
+            log.debug(f"Creating new match: {new_match}")
             db.session.add(new_match)
             db.session.commit()
-            log.debug(f"Match added: {new_match}")
+            log.debug(f"Match created: {new_match}")
             return self.match_schema.dump(new_match)
         except ValidationError as err:
             log.error(f"Validation error: {err}")
@@ -87,12 +86,11 @@ class MatchService:
             abort(500, message="An unexpected error occurred")
 
     def _retrieve_match_status(self, game_id, match_id):
-        log.debug(f"Getting status for match in game {game_id} - {match_id}")
-        match_schema = MatchSchema(session=db.session)
+        log.debug(f"Retrieving status for match {match_id} in game {game_id}")
         match = Match.query.filter(
             Match.id == match_id, Match.game_id == game_id
         ).first()
-        return match_schema.dump(match)
+        return self.match_schema.dump(match)
 
     def _apply_move(self, match_status, data):
         # Implement the logic to apply a move to the match

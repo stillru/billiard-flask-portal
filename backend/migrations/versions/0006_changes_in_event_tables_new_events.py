@@ -1,8 +1,8 @@
-"""Changes in player and event tables
+"""Changes in event tables - new events
 
-Revision ID: 0005
-Revises: 0004
-Create Date: 2024-08-29 10:40:32.221465
+Revision ID: 0006
+Revises: 0005
+Create Date: 2024-08-30 08:00:54.236730
 
 """
 
@@ -11,8 +11,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "0005"
-down_revision = "0004"
+revision = "0006"
+down_revision = "0005"
 branch_labels = None
 depends_on = None
 

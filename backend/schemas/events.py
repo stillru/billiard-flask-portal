@@ -3,7 +3,13 @@ import marshmallow as ma
 from marshmallow import post_load, ValidationError
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, auto_field
 
-from backend.models.events import GlobalEvent, Event
+from backend.models.events import (
+    GlobalEvent,
+    Event,
+    HitBallEventData,
+    BallPottedEventData,
+    FoulEventData,
+)
 from backend.models.user import User
 
 
@@ -59,3 +65,33 @@ class EventSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Event
         load_instance = True
+
+
+class HitBallEventSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = HitBallEventData
+        load_instance = True
+
+    ball_number = ma.fields.Int(required=True)
+    force = ma.fields.Float(required=True, validate=lambda x: 0 <= x <= 10)
+    description = ma.fields.String()
+
+
+class BallPottedEventSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = BallPottedEventData
+        load_instance = True
+
+    ball_number = ma.fields.Integer(required=True)
+    pocket_id = ma.fields.Integer(required=True)
+    description = ma.fields.String()
+    write = ma.fields.String()
+
+
+class FoulEventSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = FoulEventData
+        load_instance = True
+
+    reason = ma.fields.String(required=True)
+    description = ma.fields.String()

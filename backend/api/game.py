@@ -11,6 +11,7 @@ from backend.models import Match
 from backend.schemas import GameSchema
 from backend.schemas.match import MatchSchema
 from backend.controllers.game_controller import MatchService
+from backend.controllers.match_controller import MatchEventService
 
 log = logging.getLogger(__name__)
 game_bp = Blueprint("game_bp", __name__)
@@ -19,7 +20,8 @@ game_bp = Blueprint("game_bp", __name__)
 class Services:
     match_schema = MatchSchema(session=db.session)
     matches_schema = MatchSchema(session=db.session, many=True)
-    controller = MatchService
+    controller_match = MatchService
+    controller_matchevents = MatchEventService
 
 
 @game_bp.route("/game")
@@ -64,8 +66,9 @@ class HandleAllMatch(MethodView, Services):
     @format_response
     def post(self, game_id):
         try:
-            match_service = MatchService()
-            match_id = match_service.start_match(game_id)
+            match_id = self.controller_match.start_match(
+                self.controller_match(), game_id
+            )
             return jsonify({"match_id": str(match_id)}), 201
         except ValueError as e:
             log.error(f"ValueError: {e}")
@@ -77,8 +80,8 @@ class HandleAllMatch(MethodView, Services):
         all_matches = Match.query.filter_by(game_id=game_id).all()
         log.debug(f"Matches in game {game_id}: {self.matches_schema.dump(all_matches)}")
         for i in all_matches:
-            self.controller.get_match_status(
-                Services.controller(), game_id=game_id, match_id=i.id
+            self.controller_match.get_match_status(
+                Services.controller_match(), game_id=game_id, match_id=i.id
             )
         if not all_matches:
             return (
@@ -95,11 +98,61 @@ class HandleMatch(MethodView, Services):
     @format_response
     def get(self, game_id, match_id):
         try:
-            status = self.controller.get_match_status(
-                self.controller(), match_id=match_id, game_id=game_id
+            status = self.controller_match.get_match_status(
+                self.controller_match(), match_id=match_id, game_id=game_id
             )
             log.info(f"Match status: {status}")
             return jsonify(status), 200
         except Exception as e:
+            log.error(f"Error retrieving match status: {e}")
+            abort(500, message="An unexpected error occurred")
+
+
+@game_bp.route("/game/<int:game_id>/match/<int:match_id>/events")
+class HandleMatchEventsView(MethodView, Services):
+    @format_response
+    def get(self, game_id, match_id):
+        try:
+            status = self.controller_match.get_match_status(
+                self.controller_match(), match_id=match_id, game_id=game_id
+            )
+            events = self.controller_matchevents.get_match_log(
+                self.controller_matchevents(), match_id=match_id
+            )
+            log.info(f"Match status: {status}")
+            log.info(f"Log match: {events}")
+            return jsonify({"gamestate": status, "gamelog": events}), 200
+        except Exception as e:
+            log.error(f"Error retrieving match status: {e}")
+            abort(500, message="An unexpected error occurred")
+
+
+@game_bp.route("/game/<int:game_id>/match/<int:match_id>/event")
+class HandleMatchEventsProcess(MethodView, Services):
+    @format_response
+    def post(self, game_id, match_id):
+        log.info(f"Received request for game_id: {game_id}, match_id: {match_id}")
+        json_data = request.get_json()
+        log.info(f"Request JSON data: {json_data}")
+
+        if not json_data:
+            log.error("No JSON data provided in the request")
+            abort(400, message="Invalid JSON data")
+
+        game_type = "8ball"
+        try:
+            event = self.controller_matchevents.process_event(
+                self.controller_matchevents(),
+                match_id=match_id,
+                game_type=game_type,
+                data=json_data.get("data"),
+                event_type=json_data.get("event_type"),
+                write=json_data.get("write"),
+            )
+            return jsonify({"event": event}), 200
+        except IntegrityError as e:
+            log.error(f"Error in db: {e.orig}")
+            abort(500, message="An unexpected error occurred")
+        except KeyError as e:
             log.error(f"Error retrieving match status: {e}")
             abort(500, message="An unexpected error occurred")
