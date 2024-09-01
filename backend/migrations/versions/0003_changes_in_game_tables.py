@@ -8,6 +8,7 @@ Create Date: 2024-08-27 19:56:48.979701
 
 from alembic import op
 import sqlalchemy as sa
+from backend.migrations.versions import log
 
 
 # revision identifiers, used by Alembic.

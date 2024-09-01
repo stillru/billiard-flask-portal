@@ -57,7 +57,6 @@ class GlobalEventSchema(SQLAlchemyAutoSchema):
         # Add additional processing for other event types as needed
         elif event_type in ["start_play", "register_player"]:
             logging.debug(data)
-
         return data
 
 
@@ -73,7 +72,6 @@ class HitBallEventSchema(SQLAlchemyAutoSchema):
         load_instance = True
 
     ball_number = ma.fields.Int(required=True)
-    force = ma.fields.Float(required=True, validate=lambda x: 0 <= x <= 10)
     description = ma.fields.String()
 
 

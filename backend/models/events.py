@@ -38,8 +38,6 @@ class HitBallEventData(db.Model):
         db.Integer, db.ForeignKey("events.id", ondelete="CASCADE"), nullable=False
     )
     ball_number = db.Column(db.Integer, nullable=False)
-    force = db.Column(db.Integer, nullable=False)
-
     event = db.relationship("Event", backref="hit_ball_data")
 
 

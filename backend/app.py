@@ -59,7 +59,7 @@ def create_app(config_class=ProductionConfig):
         if config_class.TESTING:
             upgrade(directory="migrations")
         else:
-            upgrade(directory="backend/migrations")
+            upgrade(directory="migrations")
         log.info("Database migrations applied.")
 
         # Log available endpoints
